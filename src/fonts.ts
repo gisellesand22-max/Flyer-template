@@ -1,15 +1,32 @@
 /**
- * Font loading.
- *
- * Default: load from Google Fonts (no files needed).
- * If you give me custom font files, drop them in public/fonts/ and I'll
- * switch this to @remotion/fonts loadFont() with the local files.
+ * Font loading — Poppins, self-hosted from public/fonts/ so rendering
+ * needs no network access. All text overlays use Poppins.
  */
-import { loadFont as loadHeading } from "@remotion/google-fonts/PlayfairDisplay";
-import { loadFont as loadBody } from "@remotion/google-fonts/Inter";
+import { loadFont } from "@remotion/fonts";
+import { staticFile } from "remotion";
 
-export const heading = loadHeading();
-export const body = loadBody();
+const family = "Poppins";
 
-export const headingFamily = heading.fontFamily;
-export const bodyFamily = body.fontFamily;
+loadFont({
+  family,
+  url: staticFile("fonts/Poppins-Regular.ttf"),
+  weight: "400",
+});
+loadFont({
+  family,
+  url: staticFile("fonts/Poppins-Medium.ttf"),
+  weight: "500",
+});
+loadFont({
+  family,
+  url: staticFile("fonts/Poppins-SemiBold.ttf"),
+  weight: "600",
+});
+loadFont({
+  family,
+  url: staticFile("fonts/Poppins-Bold.ttf"),
+  weight: "700",
+});
+
+export const headingFamily = family;
+export const bodyFamily = family;
