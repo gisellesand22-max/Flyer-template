@@ -1,56 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AbsoluteFill,
   Img,
   staticFile,
   interpolate,
-  spring,
   useCurrentFrame,
-  useVideoConfig,
 } from "remotion";
-import { COLORS } from "../config";
-import { headingFamily, bodyFamily } from "../fonts";
+import { COLORS, TEXT, VIDEO } from "../config";
+import { Bubble } from "./Bubble";
 
 type Props = {
   image: string;
-  kicker?: string;
-  title: string;
-  subtitle?: string;
+  bubbles: string[];
   align?: "top" | "center" | "bottom";
   durationInFrames: number;
 };
 
 export const SceneCard: React.FC<Props> = ({
   image,
-  kicker,
-  title,
-  subtitle,
-  align = "bottom",
+  bubbles,
+  align = "center",
   durationInFrames,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  // Falls back to the gradient placeholder if the image file isn't present.
+  const [imgFailed, setImgFailed] = useState(false);
 
   // Ken Burns slow zoom on the background.
-  const zoom = interpolate(frame, [0, durationInFrames], [1.08, 1.18], {
+  const zoom = interpolate(frame, [0, durationInFrames], [1.06, 1.16], {
     extrapolateRight: "clamp",
   });
 
-  // Fade the whole scene in and out at the edges.
-  const fadeIn = interpolate(frame, [0, 12], [0, 1], {
+  // Fade the whole scene in/out at the edges for clean cuts.
+  const fadeIn = interpolate(frame, [0, 10], [0, 1], {
     extrapolateRight: "clamp",
   });
   const fadeOut = interpolate(
     frame,
-    [durationInFrames - 12, durationInFrames],
+    [durationInFrames - 10, durationInFrames],
     [1, 0],
     { extrapolateLeft: "clamp" }
   );
   const opacity = Math.min(fadeIn, fadeOut);
 
-  // Text spring-in.
-  const enter = spring({ frame: frame - 8, fps, config: { damping: 200 } });
-  const ty = interpolate(enter, [0, 1], [40, 0]);
+  const stagger = Math.round(TEXT.staggerSeconds * VIDEO.fps);
 
   const justify =
     align === "top" ? "flex-start" : align === "center" ? "center" : "flex-end";
@@ -58,81 +51,43 @@ export const SceneCard: React.FC<Props> = ({
   return (
     <AbsoluteFill style={{ opacity, backgroundColor: COLORS.dark }}>
       <AbsoluteFill style={{ transform: `scale(${zoom})` }}>
-        {image ? (
+        {image && !imgFailed ? (
           <Img
             src={staticFile(`images/${image}`)}
+            onError={() => setImgFailed(true)}
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         ) : (
-          // Placeholder shown until a real background image is provided.
+          // Placeholder until a real background image is provided.
           <AbsoluteFill
             style={{
-              background: `linear-gradient(135deg, ${COLORS.primary}, ${COLORS.dark})`,
+              background: `linear-gradient(135deg, #2a2a40, ${COLORS.dark})`,
             }}
           />
         )}
       </AbsoluteFill>
 
-      {/* Gradient overlay for text legibility */}
-      <AbsoluteFill
-        style={{
-          background:
-            align === "top"
-              ? `linear-gradient(to bottom, ${COLORS.overlay}, transparent 55%)`
-              : align === "center"
-              ? COLORS.overlay
-              : `linear-gradient(to top, ${COLORS.overlay}, transparent 55%)`,
-        }}
-      />
+      {/* Subtle overlay for legibility */}
+      <AbsoluteFill style={{ backgroundColor: COLORS.overlay }} />
 
       <AbsoluteFill
         style={{
           justifyContent: justify,
-          alignItems: "flex-start",
-          padding: "120px 90px",
+          alignItems: "center",
+          padding: "160px 70px",
         }}
       >
-        <div style={{ transform: `translateY(${ty}px)`, opacity: enter }}>
-          {kicker ? (
-            <div
-              style={{
-                fontFamily: bodyFamily,
-                color: COLORS.secondary,
-                fontSize: 34,
-                letterSpacing: 8,
-                fontWeight: 600,
-                marginBottom: 18,
-              }}
-            >
-              {kicker}
-            </div>
-          ) : null}
-          <div
-            style={{
-              fontFamily: headingFamily,
-              color: COLORS.text,
-              fontSize: 96,
-              lineHeight: 1.05,
-              fontWeight: 700,
-              maxWidth: 880,
-            }}
-          >
-            {title}
-          </div>
-          {subtitle ? (
-            <div
-              style={{
-                fontFamily: bodyFamily,
-                color: COLORS.textMuted,
-                fontSize: 40,
-                marginTop: 24,
-                maxWidth: 820,
-                lineHeight: 1.3,
-              }}
-            >
-              {subtitle}
-            </div>
-          ) : null}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: TEXT.bubbleGap,
+            alignItems: "center",
+          }}
+        >
+          {bubbles.map((text, i) => (
+            <Bubble key={i} text={text} delayFrames={6 + i * stagger} />
+          ))}
         </div>
       </AbsoluteFill>
     </AbsoluteFill>

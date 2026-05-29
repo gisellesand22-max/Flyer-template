@@ -1,11 +1,9 @@
 import React from "react";
 import { Composition } from "remotion";
 import { Promo } from "./Promo";
-import { SCENES, OUTRO, VIDEO } from "./config";
+import { SCENES, VIDEO } from "./config";
 
-const totalSeconds =
-  SCENES.reduce((acc, s) => acc + s.durationInSeconds, 0) +
-  OUTRO.durationInSeconds;
+const totalSeconds = SCENES.reduce((acc, s) => acc + s.durationInSeconds, 0);
 
 export const RemotionRoot: React.FC = () => {
   return (
