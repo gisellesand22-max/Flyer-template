@@ -1,0 +1,22 @@
+{
+  "name": "flyer-template-video",
+  "version": "1.0.0",
+  "description": "Remotion video for the flyer project",
+  "scripts": {
+    "dev": "remotion studio",
+    "build": "remotion render",
+    "render": "remotion render Promo out/video.mp4",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.420",
+    "@remotion/google-fonts": "4.0.420",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.420"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.0",
+    "typescript": "5.9.3"
+  }
+}
