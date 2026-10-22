@@ -182,13 +182,15 @@ export const Celular: React.FC = () => {
 
 // Iconos que saltan de la pantalla y flotan alrededor (escenas 4 y 5).
 const destinos = [
-  {x: 195, y: 760},
-  {x: 885, y: 860},
-  {x: 195, y: 1030},
-  {x: 885, y: 1180},
-  {x: 195, y: 1300},
+  {x: 195, y: 728},
+  {x: 885, y: 840},
+  {x: 195, y: 946},
+  {x: 885, y: 1058},
+  {x: 195, y: 1164},
+  {x: 885, y: 1276},
+  {x: 195, y: 1382},
 ];
-const TAM = 200;
+const TAM = 155;
 
 export const IconosFlotantes: React.FC = () => {
   const f = useCurrentFrame();
@@ -196,7 +198,7 @@ export const IconosFlotantes: React.FC = () => {
   return (
     <>
       {categorias.map((c, i) => {
-        const sale = rebote(f, e4.desde + 14 + i * 9);
+        const sale = rebote(f, e4.desde + 14 + i * 6);
         const regresa = suave(f, e5.desde + i * 2);
         const p = sale * (1 - regresa);
         const d = destinos[i];
@@ -223,7 +225,7 @@ export const IconosFlotantes: React.FC = () => {
             }}
           >
             <Img src={staticFile(c.archivo)} style={{width: TAM, height: TAM, objectFit: 'contain'}} />
-            <div style={{fontFamily: fuente.apoyo, fontWeight: 600, fontSize: 36, color: color.carbon, marginTop: 4, opacity: etiqueta}}>
+            <div style={{fontFamily: fuente.apoyo, fontWeight: 600, fontSize: 32, color: color.carbon, marginTop: 2, opacity: etiqueta}}>
               {c.nombre}
             </div>
           </div>

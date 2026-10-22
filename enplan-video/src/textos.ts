@@ -46,4 +46,6 @@ export const categorias = [
   {nombre: 'Fitness', archivo: 'icons/fitness.webp'},
   {nombre: 'Comida', archivo: 'icons/comida.webp'},
   {nombre: 'Ocio', archivo: 'icons/ocio.webp'},
+  {nombre: 'Tiendas', archivo: 'icons/tiendas.webp'},
+  {nombre: 'Servicios', archivo: 'icons/servicios.png'},
 ];

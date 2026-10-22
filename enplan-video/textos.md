@@ -17,7 +17,7 @@ Para editarlos, cambia `src/textos.ts` y vuelve a renderizar con `npm run render
 | 4 | 8.5 a 11.83 s | 2 (círculo lima) | Montserrat 800, carbón |
 | 4 | | Busca | Montserrat 800, 120 px, lima |
 | 4 | | por categoría | Work Sans 600, 48 px, carbón |
-| 4 | | Belleza, Top, Fitness, Comida, Ocio (bajo cada icono) | Work Sans 600, 36 px, carbón |
+| 4 | | Belleza, Top, Fitness, Comida, Ocio, Tiendas, Servicios (bajo cada icono) | Work Sans 600, 32 px, carbón |
 | 5 | 11.83 a 14.83 s | 3 (círculo lima) | Montserrat 800, carbón |
 | 5 | | Escoge | Montserrat 800, 120 px, lima |
 | 5 | | tu próximo plan | Work Sans 600, 48 px, carbón |
