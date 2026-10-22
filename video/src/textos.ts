@@ -24,10 +24,11 @@ export const textos = {
     ],
   },
   escena4: {
+    // Lo que va entre ** aparece en negritas.
     tarjetas: [
-      'Dale visibilidad a tu negocio.',
-      'Tú decides la oferta. ¡Sin comisiones!',
-      'Empiezas con el primer mes gratis.',
+      'Dale **visibilidad** a tu negocio.',
+      'Tú decides la **oferta**. ¡Sin comisiones!',
+      'Empiezas con el **primer mes gratis**.',
     ],
   },
   escena5: {

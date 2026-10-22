@@ -35,7 +35,7 @@ const Formas: React.FC<{acento: string}> = ({acento}) => {
   const formas = [
     {x: -170, y: 10, d: 300, c: acento, fase: 0},
     {x: 870, y: 1600, d: 360, c: acento, fase: 1.7},
-    {x: 930, y: 100, d: 120, c: color.lila, fase: 3.1},
+    {x: 930, y: 100, d: 120, c: acento, fase: 3.1},
   ];
   return (
     <>

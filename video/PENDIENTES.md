@@ -10,6 +10,8 @@
 8. Etiqueta "Aguascalientes". Lleva un pin dibujado como elemento de interfaz, según brand.md sección 5. No es un icono de categoría.
 9. Tono. brand.md marca como PROPUESTA el uso de "tú" con negocios. Se usó "tú", como pide el brief.
 10. Tipografía en las tarjetas de la escena 4: Work Sans 600 para el texto y Montserrat 800 para el número (dos pesos).
-11. Escena 1 en fondo carbón. Pediste el texto en lima; lima sobre arena tiene contraste 1.46 y brand.md prohíbe usarlo para texto. Lima sobre carbón tiene 9.19. Es la única escena con fondo carbón.
+11. Escena 1 en lima sobre arena, por decisión tuya. brand.md mide ese contraste en 1.46 y lo marca como "no usar para texto"; conviene actualizar brand.md si esta excepción se queda.
 12. Tiempo de lectura de la escena 4. Tiene 17 palabras y la regla de 1 segundo por cada 3 palabras pide 5.7 s. Por tu indicación dura 4 s. Las tres tarjetas aparecen en el primer segundo para dar el máximo tiempo de lectura.
-13. Movimiento continuo. Se agregaron círculos lima y lila que flotan en los márgenes (fuera de la zona de texto), un zoom lento en cada escena e iconos, tarjetas y botón con movimiento suave.
+13. Movimiento continuo. Círculos lima que flotan en los márgenes (fuera de la zona de texto), un zoom lento en cada escena y movimiento suave en tarjetas, panel y botón. En la escena de categorías los iconos solo aparecen uno por uno, sin flotar.
+14. Escena 4. Las palabras en negritas usan Montserrat 800 y el resto Work Sans 400, para mantener dos pesos por escena.
+15. El lila sigue en la etiqueta "Datos de ejemplo" y en las barras de Edad del panel. Solo se cambiaron los círculos.

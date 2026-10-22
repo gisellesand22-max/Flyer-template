@@ -20,39 +20,22 @@ const progreso = (frame: number, desde: number, hasta: number) =>
     easing: Easing.out(Easing.cubic),
   });
 
-// Escena 1: gancho en lima sobre carbón (lima sobre arena no se lee, brand.md sección 3).
-// Entrada palabra por palabra y, al final, un círculo arena cubre la pantalla.
+// Escena 1: gancho en lima sobre arena, entrada palabra por palabra.
 const Palabra: React.FC<{texto: string; inicio: number}> = ({texto, inicio}) => {
   const e = useEntrada(inicio, 36, 9);
   return <span style={{display: 'inline-block', marginRight: '0.24em', ...e}}>{texto}</span>;
 };
 
 export const Escena1: React.FC<{duracion: number}> = ({duracion}) => {
-  const frame = useCurrentFrame();
   const palabras = textos.escena1.titular.split(' ');
-  const cortina = progreso(frame, duracion - 12, duracion);
   return (
-    <>
-      <Escena duracion={duracion} fondo={color.carbon} acento={color.lila}>
-        <Titular size={100} style={{lineHeight: 1.12, color: color.lima, transform: useFlotar(0, 6)}}>
-          {palabras.map((p, i) => (
-            <Palabra key={i} texto={p} inicio={3 + i * 2} />
-          ))}
-        </Titular>
-      </Escena>
-      <div
-        style={{
-          position: 'absolute',
-          left: 540 - 1200,
-          top: 1920 - 1200,
-          width: 2400,
-          height: 2400,
-          borderRadius: 999,
-          backgroundColor: color.arena,
-          transform: `translateY(${(1 - cortina) * 1400}px) scale(${0.2 + cortina * 0.8})`,
-        }}
-      />
-    </>
+    <Escena duracion={duracion}>
+      <Titular size={100} style={{lineHeight: 1.12, color: color.lima, transform: useFlotar(0, 6)}}>
+        {palabras.map((p, i) => (
+          <Palabra key={i} texto={p} inicio={3 + i * 2} />
+        ))}
+      </Titular>
+    </Escena>
   );
 };
 
@@ -112,12 +95,11 @@ export const Escena2: React.FC<{duracion: number}> = ({duracion}) => {
   );
 };
 
-// Escena 3: categorías en cuadrícula de dos columnas. Cada icono flota después de entrar.
-const Categoria: React.FC<{nombre: string; icono: string; inicio: number; fase: number}> = ({
+// Escena 3: categorías en cuadrícula de dos columnas. Aparecen una por una.
+const Categoria: React.FC<{nombre: string; icono: string; inicio: number}> = ({
   nombre,
   icono,
   inicio,
-  fase,
 }) => (
   <div
     style={{
@@ -142,7 +124,7 @@ const Categoria: React.FC<{nombre: string; icono: string; inicio: number; fase: 
     >
       <Img
         src={staticFile(icono)}
-        style={{width: 150, height: 150, objectFit: 'contain', transform: useFlotar(fase, 7)}}
+        style={{width: 150, height: 150, objectFit: 'contain'}}
       />
     </div>
     <div
@@ -182,8 +164,7 @@ export const Escena3: React.FC<{duracion: number}> = ({duracion}) => {
             key={c.nombre}
             nombre={c.nombre}
             icono={c.icono}
-            inicio={12 + i * 4}
-            fase={i * 0.9}
+            inicio={14 + i * 9}
           />
         ))}
       </div>
@@ -230,13 +211,21 @@ const Tarjeta: React.FC<{texto: string; numero: number; inicio: number}> = ({tex
       <div
         style={{
           fontFamily: fuente.apoyo,
-          fontWeight: 600,
+          fontWeight: 400,
           fontSize: 56,
           lineHeight: 1.2,
           color: color.carbon,
         }}
       >
-        {texto}
+        {texto.split('**').map((parte, i) =>
+          i % 2 === 1 ? (
+            <span key={i} style={{fontFamily: fuente.titular, fontWeight: 800}}>
+              {parte}
+            </span>
+          ) : (
+            parte
+          ),
+        )}
       </div>
     </div>
   );
