@@ -29,37 +29,82 @@ export const seguro = {lados: 80, arriba: 250, abajo: 400};
 
 export const FPS = 30;
 
-// Contenedor de escena: respeta la zona segura y hace fundido de salida corto.
+// Formas decorativas que flotan detrás del contenido para que nunca haya un cuadro quieto.
+const Formas: React.FC<{acento: string}> = ({acento}) => {
+  const frame = useCurrentFrame();
+  const formas = [
+    {x: -170, y: 10, d: 300, c: acento, fase: 0},
+    {x: 870, y: 1600, d: 360, c: acento, fase: 1.7},
+    {x: 930, y: 100, d: 120, c: color.lila, fase: 3.1},
+  ];
+  return (
+    <>
+      {formas.map((f, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            left: f.x + Math.sin(frame / 40 + f.fase) * 30,
+            top: f.y + Math.cos(frame / 47 + f.fase) * 30,
+            width: f.d,
+            height: f.d,
+            borderRadius: 999,
+            backgroundColor: f.c,
+            transform: `scale(${1 + Math.sin(frame / 33 + f.fase) * 0.06})`,
+          }}
+        />
+      ))}
+    </>
+  );
+};
+
+// Contenedor de escena: respeta la zona segura, tiene un zoom lento continuo
+// y sale hacia arriba con fundido corto.
 export const Escena: React.FC<{
   duracion: number;
   children: React.ReactNode;
   justify?: React.CSSProperties['justifyContent'];
-}> = ({duracion, children, justify = 'center'}) => {
+  fondo?: string;
+  acento?: string;
+  sinSalida?: boolean;
+}> = ({duracion, children, justify = 'center', fondo = color.arena, acento = color.lima, sinSalida}) => {
   const frame = useCurrentFrame();
-  const salida = interpolate(frame, [duracion - 9, duracion], [1, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const p = sinSalida
+    ? 0
+    : interpolate(frame, [duracion - 10, duracion], [0, 1], {
+        extrapolateLeft: 'clamp',
+        extrapolateRight: 'clamp',
+        easing: Easing.in(Easing.cubic),
+      });
+  const zoom = interpolate(frame, [0, duracion], [1, 1.025]);
   return (
-    <AbsoluteFill style={{backgroundColor: color.arena}}>
+    <AbsoluteFill style={{backgroundColor: fondo, overflow: 'hidden'}}>
+      <Formas acento={acento} />
       <div
         style={{
           position: 'absolute',
-          left: seguro.lados,
-          right: seguro.lados,
-          top: seguro.arriba,
-          bottom: seguro.abajo,
+          left: seguro.lados + 16,
+          right: seguro.lados + 16,
+          top: seguro.arriba + 16,
+          bottom: seguro.abajo + 16,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: justify,
-          opacity: salida,
+          opacity: 1 - p,
+          transform: `translateY(${-60 * p}px) scale(${zoom})`,
         }}
       >
         {children}
       </div>
     </AbsoluteFill>
   );
+};
+
+// Flotación suave y continua.
+export const useFlotar = (fase = 0, amplitud = 8) => {
+  const frame = useCurrentFrame();
+  return `translateY(${Math.sin(frame / 18 + fase) * amplitud}px)`;
 };
 
 // Entrada suave de abajo hacia arriba con fundido.

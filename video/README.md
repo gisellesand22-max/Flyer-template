@@ -1,6 +1,6 @@
 # Video explainer enplan. para negocios
 
-Video vertical 1080x1920, 30 fps, 40 s, sin audio. Hecho con Remotion.
+Video vertical 1080x1920, 30 fps, 30 s, sin audio. Hecho con Remotion.
 
 ## Comandos
 1. Instalar: `npm install`

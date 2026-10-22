@@ -20,7 +20,7 @@ export const textos = {
       {nombre: 'Ocio', icono: 'icons/ocio.webp'},
       {nombre: 'Tiendas', icono: 'icons/tiendas.webp'},
       {nombre: 'Servicios', icono: 'icons/servicios.webp'},
-      {nombre: 'Destacados', icono: 'icons/destacados.webp'},
+      {nombre: 'Top', icono: 'icons/top.webp'},
     ],
   },
   escena4: {
