@@ -16,11 +16,12 @@ export const Pop: React.FC<{
   const {fps} = useVideoConfig();
   const s = start + delay;
   const sp = spring({frame: frame - s, fps, config: {damping: 11, stiffness: 170, mass: 0.7}});
-  let opacity = interpolate(frame, [s, s + 6], [0, 1], clamp);
+  // La opacidad arranca 2 cuadros tarde para no encimarse con el texto que sale
+  let opacity = interpolate(frame, [s + 2, s + 8], [0, 1], clamp);
   let y = interpolate(sp, [0, 1], [70, 0]);
   const scale = interpolate(sp, [0, 1], [0.9, 1]);
   if (end !== undefined) {
-    const e = interpolate(frame, [end, end + 5], [0, 1], clamp);
+    const e = interpolate(frame, [end, end + 3], [0, 1], clamp);
     opacity *= 1 - e;
     y -= 40 * e;
   }
@@ -174,7 +175,7 @@ export const Phone: React.FC<{inAt: number; outAt: number; steps: [number, numbe
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const sp = spring({frame: frame - inAt, fps, config: {damping: 13, stiffness: 120, mass: 0.8}});
-  const out = interpolate(frame, [outAt, outAt + 10], [0, 1], clamp);
+  const out = interpolate(frame, [outAt, outAt + 6], [0, 1], clamp);
   if (frame < inAt || out >= 1) return null;
   const y = interpolate(sp, [0, 1], [700, 0]) + out * 200;
   const opacity = interpolate(frame, [inAt, inAt + 6], [0, 1], clamp) * (1 - out);

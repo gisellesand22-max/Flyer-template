@@ -30,7 +30,7 @@ Si Remotion no puede descargar su navegador, agrega la ruta de un Chrome o Chrom
 3. **Frases partidas en 2 pantallas** (escenas 1, 2, 4 y 5) para no pasar de 6 palabras por pantalla. Los textos no cambiaron. En la escena 2, "plan" se queda en la segunda pantalla.
 4. **Pasos de la escena 3 uno a la vez.** Cada paso sale y entra el siguiente, para no acumular más de 6 palabras.
 5. **El logo no cuenta como palabra** en el límite de 6 palabras.
-6. **Iconos de Tiendas y Servicios.** PENDIENTE: falta recibir los archivos (bolsa roja = Tiendas, mano con estrella = Servicios).
+6. **Icono de Servicios con fondo quitado.** El archivo original de la mano traía el cuadriculado dibujado. Se borró solo el fondo con código, con autorización de Giselle; la ilustración no se modificó. Sobre fondos oscuros podría verse un borde claro muy fino. Si existe una versión con transparencia real, conviene reemplazarla en `public/icons/servicios.webp`.
 7. **Icono de Servicios con mano.** El prompt dice "no uses manos"; Giselle autorizó usar este icono porque es el oficial de la categoría.
 8. **Estrella disco (categoría "top") fuera del video.** Su archivo trae el cuadriculado dibujado, sin transparencia real. Pendiente: versión con fondo transparente si se quiere usar.
 9. **Logo.** Solo se recibió `enplan_logo_carbon_sobre_arena.svg`. Los otros 4 SVG de brand.md no se recibieron. brand.md dice que los SVG son una reconstrucción; si existe el original, ese manda.
