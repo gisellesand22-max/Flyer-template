@@ -1,0 +1,20 @@
+{
+  "name": "video-trabajo-remoto",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render src/index.ts TrabajoRemoto out/trabajo-remoto.mp4"
+  },
+  "dependencies": {
+    "@fontsource/poppins": "5.1.0",
+    "@fontsource/silkscreen": "5.1.0",
+    "@remotion/cli": "4.0.538",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.538"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "typescript": "5.6.3"
+  }
+}

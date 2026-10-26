@@ -1,0 +1,38 @@
+// Subtítulos con el tiempo de inicio de cada palabra (segundos del corte v1).
+// `hl` marca las palabras resaltadas en aqua: una idea por frase.
+export type Chunk = { words: [string, number][]; end: number; hl: number[] };
+
+export const CHUNKS: Chunk[] = [
+  { words: [["Hace", 0.0], ["tiempo", 0.9], ["estaba", 1.14], ["buscando", 1.4]], end: 1.82, hl: [] },
+  { words: [["trabajo", 1.82], ["remoto", 2.22], ["bien", 2.76], ["pagado,", 3.02]], end: 3.64, hl: [1] },
+  { words: [["te", 3.64], ["voy", 3.78], ["a", 3.86], ["decir", 3.94], ["cómo", 4.16], ["aplicar", 4.42]], end: 4.98, hl: [4] },
+  { words: [["y", 4.98], ["dónde", 5.14], ["aplicar.", 5.3]], end: 6.2, hl: [1] },
+  { words: [["Define", 6.26], ["bien", 6.62], ["qué", 6.82], ["puesto", 6.96], ["quieres,", 7.2]], end: 8.4, hl: [3] },
+  { words: [["yo", 8.54], ["estaba", 10.16], ["en", 10.34], ["marketing", 10.5]], end: 10.9, hl: [3] },
+  { words: [["y", 10.9], ["me", 11.42], ["cambié", 11.6], ["a", 11.94], ["un", 12.04], ["rol", 12.14]], end: 12.4, hl: [] },
+  { words: [["más", 12.4], ["específico", 12.76], ["de", 13.5], ["inteligencia", 13.58], ["artificial.", 14.1]], end: 14.78, hl: [3, 4] },
+  { words: [["Entonces,", 14.78], ["define", 15.26], ["bien", 15.36]], end: 15.7, hl: [] },
+  { words: [["a", 15.7], ["dónde", 15.92], ["quieres", 16.04], ["aplicar,", 16.28]], end: 17.3, hl: [1] },
+  { words: [["en", 17.3], ["qué", 17.5], ["industria", 17.64]], end: 18.22, hl: [2] },
+  { words: [["y", 18.22], ["cuánto", 18.44], ["quieres", 18.72], ["ganar.", 18.96]], end: 19.88, hl: [3] },
+  { words: [["Adapta", 19.88], ["tu", 20.2], ["CV", 20.4], ["a", 20.64], ["cada", 20.9], ["vacante,", 21.06]], end: 21.64, hl: [2] },
+  { words: [["depende", 21.64], ["de", 21.84], ["las", 22.04], ["responsabilidades", 22.16]], end: 22.84, hl: [3] },
+  { words: [["que", 22.84], ["te", 23.06], ["piden,", 23.22]], end: 23.7, hl: [] },
+  { words: [["y", 23.7], ["esto", 23.74], ["lo", 23.86], ["puedes", 23.98], ["hacer", 24.12], ["literal", 24.36]], end: 24.78, hl: [] },
+  { words: [["copiándole", 24.78], ["a", 25.42], ["la", 25.54], ["IA", 25.64], ["el", 25.92], ["CV", 26.24]], end: 26.64, hl: [3] },
+  { words: [["y", 26.64], ["el", 27.18], ["rol", 27.34], ["al", 27.56], ["que", 28.0], ["estás", 28.08], ["aplicando.", 28.24]], end: 28.72, hl: [2] },
+  { words: [["Mantén", 28.72], ["tu", 29.36], ["LinkedIn", 29.48], ["activo,", 29.78]], end: 30.94, hl: [3] },
+  { words: [["organiza", 30.94], ["tus", 31.26], ["aplicaciones,", 31.4]], end: 32.32, hl: [0] },
+  { words: [["crea", 32.32], ["un", 32.52], ["Google", 32.62], ["Sheet", 32.76]], end: 33.16, hl: [2, 3] },
+  { words: [["para", 33.16], ["irlas", 33.3], ["trackeando", 33.56], ["por", 34.1], ["empresa,", 34.32]], end: 35.18, hl: [4] },
+  { words: [["pon", 35.18], ["los", 35.28], ["links,", 35.46], ["el", 35.96], ["salario,", 36.02], ["fechas,", 36.74]], end: 37.6, hl: [4] },
+  { words: [["así", 38.1], ["vas", 38.3], ["a", 38.58], ["saber", 39.38]], end: 39.62, hl: [3] },
+  { words: [["cuándo", 39.62], ["aplicaste", 39.96], ["y", 40.46], ["a", 40.68], ["dónde.", 40.78]], end: 41.14, hl: [0] },
+  { words: [["Puedes", 41.14], ["contactar", 41.32], ["directamente", 41.8]], end: 42.18, hl: [2] },
+  { words: [["a", 42.18], ["los", 42.4], ["reclutadores", 42.52]], end: 43.12, hl: [2] },
+  { words: [["con", 43.12], ["mensajes", 43.44], ["personalizados.", 43.8]], end: 44.9, hl: [2] },
+  { words: [["Seguro", 44.9], ["encuentras", 45.4], ["al", 45.84], ["hiring", 46.0], ["manager", 46.24]], end: 46.78, hl: [3, 4] },
+  { words: [["en", 46.78], ["el", 47.06], ["LinkedIn", 47.16], ["de", 47.48], ["la", 47.68], ["empresa.", 47.76]], end: 48.42, hl: [2] },
+  { words: [["En", 48.42], ["los", 48.52], ["comentarios", 48.62], ["voy", 48.94], ["a", 49.18], ["dejar", 49.3]], end: 49.48, hl: [2] },
+  { words: [["dónde", 49.48], ["encontrar", 49.76], ["trabajo", 50.14], ["remoto.", 50.44]], end: 51.1, hl: [3] },
+];
