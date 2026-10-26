@@ -26,7 +26,7 @@ export const TrabajoRemoto: React.FC = () => {
 
   return (
     <AbsoluteFill>
-      <OffthreadVideo src={staticFile("corte_v1.mp4")} />
+      <OffthreadVideo src={staticFile("video_v2.mp4")} />
 
       <Title />
       <StepStamp n={1} label="Define tu puesto" from={6.26} to={19.86} />

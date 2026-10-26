@@ -1,7 +1,7 @@
 import React from "react";
 import { interpolate } from "remotion";
 import { CHUNKS } from "./captions";
-import { C, PIXEL, POPPINS, usePop, useSec } from "./theme";
+import { C, PIXEL, POPPINS, usePop, useRealSec, useSec } from "./theme";
 
 // Zona de ilustraciones: debajo de la cara y encima de los subtítulos.
 // Todo queda dentro del margen seguro de TikTok (x 80 a 920).
@@ -129,7 +129,7 @@ export const StepStamp: React.FC<{ n: number; label: string; from: number; to: n
 
 // Subtítulos: las palabras aparecen al ritmo en que se dicen
 export const Captions: React.FC = () => {
-  const t = useSec();
+  const t = useRealSec();
   const chunk = CHUNKS.find((c) => t >= c.words[0][1] && t < c.end);
   if (!chunk) return null;
   return (
