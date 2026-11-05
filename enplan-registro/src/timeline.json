@@ -1,0 +1,125 @@
+{
+  "fps": 30,
+  "comment": "Tiempos en segundos del video original (assets/edits.mp4). 'hold' congela ese cuadro; 'play' reproduce el tramo completo, sin cortar nada.",
+  "segments": [
+    {
+      "play": [
+        0,
+        0.7
+      ]
+    },
+    {
+      "hold": 0.7,
+      "dur": 1.6
+    },
+    {
+      "play": [
+        0.7,
+        2.0
+      ]
+    },
+    {
+      "hold": 2.0,
+      "dur": 1.4
+    },
+    {
+      "play": [
+        2.0,
+        3.6
+      ]
+    },
+    {
+      "hold": 3.6,
+      "dur": 1.9
+    },
+    {
+      "play": [
+        3.6,
+        8.3
+      ],
+      "speed": 1.5
+    },
+    {
+      "hold": 8.3,
+      "dur": 1.0
+    },
+    {
+      "play": [
+        8.3,
+        9.3
+      ]
+    },
+    {
+      "hold": 9.3,
+      "dur": 1.8
+    },
+    {
+      "play": [
+        9.3,
+        10.9
+      ]
+    },
+    {
+      "hold": 10.9,
+      "dur": 2.0
+    },
+    {
+      "play": [
+        10.9,
+        11.66
+      ]
+    },
+    {
+      "hold": 11.63,
+      "dur": 2.35
+    }
+  ],
+  "blur": [
+    {
+      "comment": "Sugerencia de autocompletar del teclado (Gisele770)",
+      "x": 0,
+      "y": 1240,
+      "w": 1080,
+      "h": 115,
+      "from": 5.25,
+      "to": 6.45
+    },
+    {
+      "comment": "Conectada como (correo) al final de los planes",
+      "x": 0,
+      "y": 1785,
+      "w": 1080,
+      "h": 135,
+      "from": 10.0,
+      "to": 10.42
+    },
+    {
+      "comment": "Correo en el checkout, primera posición",
+      "x": 90,
+      "y": 1350,
+      "w": 900,
+      "h": 150,
+      "from": 10.3,
+      "to": 10.68
+    },
+    {
+      "comment": "Correo en el checkout, segunda posición",
+      "x": 90,
+      "y": 1090,
+      "w": 900,
+      "h": 135,
+      "from": 10.6,
+      "to": 11.1
+    },
+    {
+      "comment": "Correo autocompletado en el formulario",
+      "x": 0,
+      "y": 480,
+      "w": 1080,
+      "h": 320,
+      "from": 8.52,
+      "to": 9.02
+    }
+  ],
+  "closeDur": 2.0
+}

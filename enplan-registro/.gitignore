@@ -1,0 +1,6 @@
+node_modules/
+assets/*.mp4
+public/*.mp4
+public/brand/
+output/*.mp4
+out/
