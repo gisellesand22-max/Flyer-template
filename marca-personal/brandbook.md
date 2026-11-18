@@ -58,34 +58,39 @@ IA, tecnología y wearables explicados fácil. Para gente curiosa que quiere ent
 
 ## 3. Colores
 
-| Rol | Nombre | HEX | Uso |
-|---|---|---|---|
-| Principal | Ciruela | `#712254` | Fondos, cajas de texto, títulos, marcos |
-| Acento | Aqua | `#bcfffd` | Texto destacado, resaltados, iconos, detalles |
-| Base | Blanco | `#FFFFFF` | Texto principal sobre ciruela, fondos claros |
+Referencia visual: `paleta-color.webp`.
+
+| Rol | Nombre | HEX | RGB | Uso |
+|---|---|---|---|---|
+| Principal | Tinta | `#0E2F3A` | 14, 47, 58 | Textos, títulos, bordes y botones. Es el color que da la estructura. |
+| Acento | Aqua | `#7FE3E8` | 127, 227, 232 | Sombras de las cajitas, resaltados y elementos que quieres que se noten. |
+| Apoyo | Aqua claro | `#E4F4F5` | 228, 244, 245 | Fondos suaves y bloques secundarios. |
+| Base | Blanco | `#FFFFFF` | 255, 255, 255 | Fondo principal. Deja respirar. |
 
 ### Combinaciones para texto en pantalla
 
-| Fondo | Texto | Resultado |
-|---|---|---|
-| Ciruela | Blanco | Se lee muy bien |
-| Ciruela | Aqua | Se lee muy bien |
-| Aqua | Ciruela | Se lee muy bien (contraste aprox. 9 a 1) |
-| Blanco | Ciruela | Se lee muy bien (contraste aprox. 10 a 1) |
-| Blanco | Aqua | No usar, casi no se ve |
-| Aqua | Blanco | No usar, casi no se ve |
+| Texto | Fondo | Contraste | Uso |
+|---|---|---|---|
+| Tinta | Blanco | 14.1 : 1 | Sí |
+| Tinta | Aqua claro | 12.5 : 1 | Sí |
+| Tinta | Aqua | 9.5 : 1 | Sí |
+| Blanco | Tinta | 14.1 : 1 | Sí |
+| Aqua | Tinta | 9.5 : 1 | Sí |
+| Blanco | Aqua | 1.5 : 1 | No usar |
+| Aqua | Aqua claro | 1.3 : 1 | No usar |
 
-*Contrastes calculados con la fórmula estándar WCAG, son aproximados.*
+*Contrastes calculados con la fórmula estándar WCAG.*
 
 ### Sobre video
 
-Cuando el fondo sea una imagen o video, pon el texto dentro de una caja ciruela o aqua. Así se lee en cualquier escena.
+Cuando el fondo sea una imagen o video, pon el texto dentro de una caja blanca o tinta, con borde tinta y sombra aqua. Así se lee en cualquier escena.
 
-### Proporción sugerida por video
+### Proporción de uso
 
-1. 60% tu contenido (video, pantalla, producto)
-2. 25% ciruela
-3. 15% aqua
+1. 60% blanco
+2. 25% tinta
+3. 10% aqua
+4. El resto, aqua claro
 
 ---
 
@@ -126,11 +131,11 @@ Fuente pixelada para el toque tech. Úsala para: palabras clave, números, nombr
 
 | Elemento | Estilo |
 |---|---|
-| Subtítulos hablados | Poppins Bold, blanco, con caja ciruela |
-| Palabra clave resaltada | Cambia a aqua o pasa a Pixel |
+| Subtítulos hablados | Poppins Bold, tinta sobre caja blanca, con borde tinta y sombra aqua |
+| Palabra clave resaltada | Fondo aqua con texto tinta, o pasa a Pixel |
 | Título de apertura | Poppins Bold grande, 3 a 6 palabras máximo |
-| Etiquetas ("TOP 3", "NUEVO") | Pixel, aqua sobre ciruela |
-| Datos y precios | Pixel o Poppins Bold, resaltado en aqua |
+| Etiquetas ("TOP 3", "NUEVO") | Pixel, aqua sobre tinta |
+| Datos y precios | Pixel o Poppins Bold, tinta con resaltado aqua |
 
 ### Reglas
 
@@ -162,7 +167,7 @@ Fuente pixelada para el toque tech. Úsala para: palabras clave, números, nombr
 
 ## 7. Portadas
 
-1. Fondo ciruela o aqua.
+1. Fondo blanco o aqua claro, con títulos en tinta.
 2. Título de 3 a 5 palabras en Poppins Bold.
 3. Una palabra en Pixel como acento.
 4. El producto o tu cara grande en primer plano.
@@ -173,7 +178,7 @@ Fuente pixelada para el toque tech. Úsala para: palabras clave, números, nombr
 ## 8. Qué evitar
 
 1. Colores fuera de la paleta.
-2. Texto aqua sobre blanco.
+2. Texto blanco sobre aqua, o aqua sobre aqua claro.
 3. Párrafos en fuente pixel.
 4. Más de un efecto pixel por escena.
 5. Frases largas en pantalla.
@@ -184,7 +189,7 @@ Fuente pixelada para el toque tech. Úsala para: palabras clave, números, nombr
 ## 9. Checklist antes de publicar
 
 1. ¿El gancho está en los primeros 2 segundos?
-2. ¿Solo uso ciruela, aqua y blanco?
+2. ¿Solo uso tinta, aqua, aqua claro y blanco?
 3. ¿Los subtítulos se leen sobre cualquier escena?
 4. ¿Poppins domina y Pixel es solo acento?
 5. ¿Suena cercano, directo y sin jerga?
