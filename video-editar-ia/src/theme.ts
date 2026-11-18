@@ -3,12 +3,12 @@ import "@fontsource/poppins/700.css";
 import "@fontsource/silkscreen/400.css";
 import { interpolate, spring, useCurrentFrame } from "remotion";
 
-// Paleta del brandbook personal: solo ciruela, aqua y blanco
+// Paleta del brandbook personal (ver marca-personal/brandbook.md)
 export const C = {
-  ciruela: "#712254",
-  aqua: "#bcfffd",
+  tinta: "#0E2F3A",
+  aqua: "#7FE3E8",
+  aquaClaro: "#E4F4F5",
   blanco: "#FFFFFF",
-  ciruelaTinte: "rgba(113, 34, 84, 0.12)",
 };
 
 export const POPPINS = "Poppins, sans-serif";
@@ -39,9 +39,10 @@ export const outToSrc = (o: number) => {
 
 export const useT = () => outToSrc(useCurrentFrame() / FPS);
 
-export const usePop = (at: number, damping = 12) => {
+// Rebote suave: entra rápido y casi sin oscilar, para un movimiento más moderno
+export const usePop = (at: number, damping = 16) => {
   const t = useT();
-  return spring({ frame: (t - at) * FPS, fps: FPS, config: { damping, stiffness: 200, mass: 0.6 } });
+  return spring({ frame: (t - at) * FPS, fps: FPS, config: { damping, stiffness: 170, mass: 0.6 } });
 };
 
 export const prog = (t: number, a: number, b: number) =>

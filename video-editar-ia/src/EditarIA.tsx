@@ -20,8 +20,8 @@ const Card: React.FC<{ from: number; to: number; children: React.ReactNode }> = 
         position: "absolute",
         ...CARD,
         background: C.blanco,
-        border: `6px solid ${C.ciruela}`,
-        borderRadius: 36,
+        border: `5px solid ${C.tinta}`,
+        borderRadius: 32,
         boxShadow: `12px 12px 0 ${C.aqua}`,
         overflow: "hidden",
         boxSizing: "border-box",
@@ -42,8 +42,8 @@ const Pixel: React.FC<{ text: string; size: number; k: number; style?: React.CSS
       padding: "6px 20px 10px",
       borderRadius: 12,
       background: C.aqua,
-      color: C.ciruela,
-      border: `5px solid ${C.ciruela}`,
+      color: C.tinta,
+      border: `5px solid ${C.tinta}`,
       transform: `rotate(-4deg) scale(${k > 0 ? 1.5 - 0.5 * k : 0})`,
       opacity: Math.min(k * 2, 1),
       whiteSpace: "nowrap",
@@ -65,21 +65,21 @@ const RecScene: React.FC = () => {
     <>
       <svg width={IW} height={IH} viewBox={`0 0 ${IW} ${IH}`} style={{ position: "absolute", inset: 0 }}>
         {/* Esquinas de visor */}
-        <g stroke={C.ciruela} strokeWidth={6} fill="none" strokeLinecap="round">
+        <g stroke={C.tinta} strokeWidth={6} fill="none" strokeLinecap="round">
           <path d="M30 70 V30 H70 M758 30 H798 V70 M798 198 V238 H758 M70 238 H30 V198" />
         </g>
         <g transform={`translate(230 134) scale(${cam})`}>
-          <rect x={-120} y={-62} width={180} height={124} rx={22} fill={C.ciruela} />
-          <path d="M70 -30 L130 -62 V62 L70 30 Z" fill={C.ciruela} />
+          <rect x={-120} y={-62} width={180} height={124} rx={22} fill={C.tinta} />
+          <path d="M70 -30 L130 -62 V62 L70 30 Z" fill={C.tinta} />
           <circle cx={-30} cy={0} r={40} fill={C.aqua} stroke={C.blanco} strokeWidth={6} />
-          <circle cx={-30} cy={0} r={16} fill={C.ciruela} />
+          <circle cx={-30} cy={0} r={16} fill={C.tinta} />
         </g>
       </svg>
       <div style={{ position: "absolute", left: 470, top: 70, display: "flex", alignItems: "center", gap: 16, opacity: Math.min(rec * 2, 1) }}>
-        <div style={{ width: 34, height: 34, borderRadius: 17, background: C.ciruela, opacity: Math.floor(t * 3) % 2 === 0 ? 1 : 0.25 }} />
+        <div style={{ width: 34, height: 34, borderRadius: 17, background: C.tinta, opacity: Math.floor(t * 3) % 2 === 0 ? 1 : 0.25 }} />
         <Pixel text="REC" size={56} k={rec} />
       </div>
-      <div style={{ position: "absolute", left: 470, top: 168, fontFamily: POPPINS, fontWeight: 600, fontSize: 44, color: C.ciruela, opacity: rec }}>
+      <div style={{ position: "absolute", left: 470, top: 168, fontFamily: POPPINS, fontWeight: 600, fontSize: 44, color: C.tinta, opacity: rec }}>
         00:00:0{secs}
       </div>
     </>
@@ -97,7 +97,7 @@ const Tracks: React.FC<{ fill: (row: number, i: number) => number; x0: number; y
     {TRACKS.map((row, r) =>
       row.map(([x, w], i) => {
         const k = fill(r, i);
-        const bg = [C.ciruela, C.ciruelaTinte, C.aqua][r];
+        const bg = [C.tinta, C.aquaClaro, C.aqua][r];
         return (
           <div
             key={`${r}-${i}`}
@@ -109,7 +109,7 @@ const Tracks: React.FC<{ fill: (row: number, i: number) => number; x0: number; y
               height: rowH - 10,
               borderRadius: 10,
               background: bg,
-              border: r === 0 ? "none" : `3px solid ${C.ciruela}`,
+              border: r === 0 ? "none" : `3px solid ${C.tinta}`,
               boxSizing: "border-box",
               opacity: k > 0 ? 1 : 0,
             }}
@@ -127,21 +127,21 @@ const TimelineScene: React.FC = () => {
   const bar = slow ? prog(t, 4.58, 5.38) * 0.07 : 0;
   return (
     <>
-      <div style={{ position: "absolute", left: 30, top: 18, fontFamily: POPPINS, fontWeight: 600, fontSize: 34, color: C.ciruela }}>Editando</div>
+      <div style={{ position: "absolute", left: 30, top: 18, fontFamily: POPPINS, fontWeight: 600, fontSize: 34, color: C.tinta }}>Editando</div>
       <svg width={60} height={60} viewBox="-30 -30 60 60" style={{ position: "absolute", right: 30, top: 12 }}>
-        <circle r={25} fill={C.blanco} stroke={C.ciruela} strokeWidth={5} />
-        <line x1={0} y1={0} x2={0} y2={-16} stroke={C.ciruela} strokeWidth={5} strokeLinecap="round" transform={`rotate(${spin})`} />
-        <line x1={0} y1={0} x2={11} y2={0} stroke={C.ciruela} strokeWidth={5} strokeLinecap="round" transform={`rotate(${spin / 12})`} />
+        <circle r={25} fill={C.blanco} stroke={C.tinta} strokeWidth={5} />
+        <line x1={0} y1={0} x2={0} y2={-16} stroke={C.tinta} strokeWidth={5} strokeLinecap="round" transform={`rotate(${spin})`} />
+        <line x1={0} y1={0} x2={11} y2={0} stroke={C.tinta} strokeWidth={5} strokeLinecap="round" transform={`rotate(${spin / 12})`} />
       </svg>
       <Tracks fill={() => 1} x0={40} y0={82} rowH={46} />
-      <div style={{ position: "absolute", left: head, top: 72, width: 6, height: 150, background: C.ciruela, borderRadius: 3 }} />
-      <div style={{ position: "absolute", left: head - 12, top: 64, width: 30, height: 18, borderRadius: 6, background: C.ciruela }} />
+      <div style={{ position: "absolute", left: head, top: 72, width: 6, height: 150, background: C.tinta, borderRadius: 3 }} />
+      <div style={{ position: "absolute", left: head - 12, top: 64, width: 30, height: 18, borderRadius: 6, background: C.tinta }} />
       {slow && (
         <div style={{ position: "absolute", left: 40, top: 224, display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 520, height: 24, borderRadius: 12, border: `4px solid ${C.ciruela}`, boxSizing: "border-box" }}>
-            <div style={{ width: `${Math.max(bar, 0.02) * 100}%`, height: "100%", borderRadius: 12, background: C.ciruela }} />
+          <div style={{ width: 520, height: 24, borderRadius: 12, border: `4px solid ${C.tinta}`, boxSizing: "border-box" }}>
+            <div style={{ width: `${Math.max(bar, 0.02) * 100}%`, height: "100%", borderRadius: 12, background: C.tinta }} />
           </div>
-          <span style={{ fontFamily: POPPINS, fontWeight: 600, fontSize: 30, color: C.ciruela }}>Cargando…</span>
+          <span style={{ fontFamily: POPPINS, fontWeight: 600, fontSize: 30, color: C.tinta }}>Cargando…</span>
         </div>
       )}
     </>
@@ -165,7 +165,7 @@ const AiScene: React.FC = () => {
           width: 640,
           height: 74,
           borderRadius: 37,
-          border: `5px solid ${C.ciruela}`,
+          border: `5px solid ${C.tinta}`,
           boxSizing: "border-box",
           display: "flex",
           alignItems: "center",
@@ -173,13 +173,13 @@ const AiScene: React.FC = () => {
           fontFamily: POPPINS,
           fontWeight: 600,
           fontSize: 30,
-          color: C.ciruela,
+          color: C.tinta,
           whiteSpace: "nowrap",
           overflow: "hidden",
         }}
       >
         {sent ? "" : typed(PROMPT, t, 6.0, 7.05)}
-        {!sent && Math.floor(t * 3) % 2 === 0 && <span style={{ width: 3, height: 34, background: C.ciruela, marginLeft: 2 }} />}
+        {!sent && Math.floor(t * 3) % 2 === 0 && <span style={{ width: 3, height: 34, background: C.tinta, marginLeft: 2 }} />}
       </div>
       {sent && (
         <div
@@ -189,7 +189,7 @@ const AiScene: React.FC = () => {
             top: 20,
             padding: "14px 24px",
             borderRadius: "28px 28px 28px 6px",
-            background: C.ciruela,
+            background: C.tinta,
             color: C.blanco,
             fontFamily: POPPINS,
             fontWeight: 600,
@@ -201,7 +201,7 @@ const AiScene: React.FC = () => {
         </div>
       )}
       <svg width={74} height={74} viewBox="0 0 74 74" style={{ position: "absolute", left: 690, top: 20, transform: `scale(${t >= 7.18 && t < 7.3 ? 0.85 : 1})` }}>
-        <circle cx={37} cy={37} r={34} fill={C.ciruela} />
+        <circle cx={37} cy={37} r={34} fill={C.tinta} />
         <path d="M22 37 H50 M38 24 L51 37 L38 50" fill="none" stroke={C.blanco} strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
       </svg>
       <div
@@ -213,7 +213,7 @@ const AiScene: React.FC = () => {
           height: 100,
           borderRadius: 50,
           background: C.aqua,
-          border: `6px solid ${C.ciruela}`,
+          border: `6px solid ${C.tinta}`,
           boxSizing: "border-box",
           display: "flex",
           alignItems: "center",
@@ -221,7 +221,7 @@ const AiScene: React.FC = () => {
           fontFamily: POPPINS,
           fontWeight: 700,
           fontSize: 40,
-          color: C.ciruela,
+          color: C.tinta,
           transform: `scale(${ia}) rotate(${(1 - ia) * -40}deg)`,
         }}
       >
@@ -229,15 +229,15 @@ const AiScene: React.FC = () => {
       </div>
       {/* La misma línea de tiempo, ahora se llena sola y rápido */}
       {TRACKS.map((_, r) => (
-        <div key={r} style={{ position: "absolute", left: 30, top: 114 + r * 46, width: 630, height: 36, borderRadius: 10, border: `3px dashed ${C.ciruelaTinte}`, boxSizing: "border-box" }} />
+        <div key={r} style={{ position: "absolute", left: 30, top: 114 + r * 46, width: 630, height: 36, borderRadius: 10, border: `3px dashed ${C.aquaClaro}`, boxSizing: "border-box" }} />
       ))}
       <div style={{ transform: "scale(0.82)", transformOrigin: "30px 114px", position: "absolute", inset: 0 }}>
         <Tracks fill={(r, i) => prog(t, 7.6 + r * 0.1 + i * 0.05, 7.8 + r * 0.1 + i * 0.05)} x0={30} y0={114} rowH={56} />
       </div>
       {t >= 8.25 && (
         <svg width={64} height={64} viewBox="-32 -32 64 64" style={{ position: "absolute", left: 590, top: 190, transform: `scale(${done})` }}>
-          <circle r={28} fill={C.aqua} stroke={C.ciruela} strokeWidth={5} />
-          <path d="M-12 0 L-3 10 L14 -10" fill="none" stroke={C.ciruela} strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
+          <circle r={28} fill={C.aqua} stroke={C.tinta} strokeWidth={5} />
+          <path d="M-12 0 L-3 10 L14 -10" fill="none" stroke={C.tinta} strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )}
     </>
@@ -256,7 +256,7 @@ const ThisVideo: React.FC = () => {
   return (
     <AbsoluteFill style={{ opacity: out }}>
       <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
-        {[C.ciruela, C.aqua].map((col, i) => (
+        {[C.tinta, C.aqua].map((col, i) => (
           <path
             key={col}
             d={`M${inset} ${inset + L} V${inset} H${inset + L} M${1080 - inset - L} ${inset} H${1080 - inset} V${inset + L} M${1080 - inset} ${1920 - inset - L} V${1920 - inset} H${1080 - inset - L} M${inset + L} ${1920 - inset} H${inset} V${1920 - inset - L}`}
@@ -297,23 +297,23 @@ const LinkScene: React.FC = () => {
           padding: "14px 26px",
           borderRadius: 40,
           background: C.aqua,
-          border: `5px solid ${C.ciruela}`,
+          border: `5px solid ${C.tinta}`,
           transform: `scale(${chip})`,
           transformOrigin: "left center",
         }}
       >
         <svg width={40} height={40} viewBox="0 0 40 40">
-          <g fill="none" stroke={C.ciruela} strokeWidth={5} strokeLinecap="round">
+          <g fill="none" stroke={C.tinta} strokeWidth={5} strokeLinecap="round">
             <path d="M17 23 L23 17" />
             <path d="M14 18 L9 23 a6 6 0 0 0 8 8 L22 26" />
             <path d="M18 14 L23 9 a6 6 0 0 1 8 8 L26 22" />
           </g>
         </svg>
-        <span style={{ fontFamily: POPPINS, fontWeight: 700, fontSize: 38, color: C.ciruela, opacity: name }}>Remotion</span>
+        <span style={{ fontFamily: POPPINS, fontWeight: 700, fontSize: 38, color: C.tinta, opacity: name }}>Remotion</span>
       </div>
       <svg width={IW} height={IH} viewBox={`0 0 ${IW} ${IH}`} style={{ position: "absolute", inset: 0 }}>
         {arrow > 0 && (
-          <g stroke={C.ciruela} strokeWidth={6} strokeLinecap="round" fill="none">
+          <g stroke={C.tinta} strokeWidth={6} strokeLinecap="round" fill="none">
             <line x1={330} y1={134} x2={330 + 90 * arrow} y2={134} />
             {arrow > 0.9 && <path d="M404 120 L420 134 L404 148" strokeLinejoin="round" />}
           </g>
@@ -327,31 +327,31 @@ const LinkScene: React.FC = () => {
           width: 362,
           height: 224,
           borderRadius: 20,
-          border: `5px solid ${C.ciruela}`,
+          border: `5px solid ${C.tinta}`,
           overflow: "hidden",
           background: C.blanco,
           boxSizing: "border-box",
           transform: `scale(${term})`,
         }}
       >
-        <div style={{ height: 52, background: C.ciruela, display: "flex", alignItems: "center", gap: 10, padding: "0 16px" }}>
+        <div style={{ height: 52, background: C.tinta, display: "flex", alignItems: "center", gap: 10, padding: "0 16px" }}>
           {[0, 1, 2].map((i) => (
             <div key={i} style={{ width: 13, height: 13, borderRadius: 7, background: C.blanco, opacity: 0.8 }} />
           ))}
           <span style={{ marginLeft: 8, fontFamily: POPPINS, fontWeight: 600, fontSize: 28, color: C.blanco }}>Claude Code</span>
         </div>
-        <div style={{ padding: "18px 20px", fontFamily: POPPINS, fontWeight: 600, fontSize: 30, color: C.ciruela, display: "flex", alignItems: "center", gap: 6 }}>
-          ›<span style={{ width: 14, height: 30, background: C.ciruela, opacity: Math.floor(t * 3) % 2 === 0 ? 1 : 0 }} />
+        <div style={{ padding: "18px 20px", fontFamily: POPPINS, fontWeight: 600, fontSize: 30, color: C.tinta, display: "flex", alignItems: "center", gap: 6 }}>
+          ›<span style={{ width: 14, height: 30, background: C.tinta, opacity: Math.floor(t * 3) % 2 === 0 ? 1 : 0 }} />
         </div>
         {t >= 12.74 && (
           <div style={{ position: "absolute", left: 20, bottom: 26, display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 230, height: 24, borderRadius: 12, border: `4px solid ${C.ciruela}`, boxSizing: "border-box" }}>
-              <div style={{ width: `${bar * 100}%`, height: "100%", borderRadius: 12, background: C.ciruela }} />
+            <div style={{ width: 230, height: 24, borderRadius: 12, border: `4px solid ${C.tinta}`, boxSizing: "border-box" }}>
+              <div style={{ width: `${bar * 100}%`, height: "100%", borderRadius: 12, background: C.tinta }} />
             </div>
             {t >= 13.45 && (
               <svg width={52} height={52} viewBox="-26 -26 52 52" style={{ transform: `scale(${ok})` }}>
-                <circle r={23} fill={C.aqua} stroke={C.ciruela} strokeWidth={5} />
-                <path d="M-10 0 L-2 8 L11 -8" fill="none" stroke={C.ciruela} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" />
+                <circle r={23} fill={C.aqua} stroke={C.tinta} strokeWidth={5} />
+                <path d="M-10 0 L-2 8 L11 -8" fill="none" stroke={C.tinta} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             )}
           </div>
@@ -369,32 +369,42 @@ const Captions: React.FC = () => {
     <div style={{ position: "absolute", top: CARD.top + CARD.height + 20, left: CARD.left, width: CARD.width, display: "flex", justifyContent: "center" }}>
       <div
         style={{
-          background: C.ciruela,
-          border: `4px solid ${C.aqua}`,
-          borderRadius: 24,
-          padding: "8px 26px 12px",
+          background: C.blanco,
+          border: `4px solid ${C.tinta}`,
+          borderRadius: 40,
+          boxShadow: `8px 8px 0 ${C.aqua}`,
+          padding: "8px 30px 12px",
           fontFamily: POPPINS,
           fontWeight: 700,
           fontSize: 50,
-          lineHeight: 1.2,
-          color: C.blanco,
+          lineHeight: 1.25,
+          color: C.tinta,
           textAlign: "center",
         }}
       >
-        {c.words.map(([w, at], i) => (
-          <span
-            key={i}
-            style={{
-              display: "inline-block",
-              marginRight: i < c.words.length - 1 ? "0.26em" : 0,
-              opacity: t >= at - 0.05 ? 1 : 0,
-              transform: `scale(${interpolate(t, [at - 0.05, at + 0.1], [0.7, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
-              color: c.hl.includes(i) ? C.aqua : C.blanco,
-            }}
-          >
-            {w}
-          </span>
-        ))}
+        {c.words.map(([w, at], i) => {
+          // Palabras clave seguidas comparten un solo bloque aqua
+          const h = c.hl.includes(i);
+          const prev = h && c.hl.includes(i - 1);
+          const next = h && c.hl.includes(i + 1);
+          const r = (on: boolean) => (on ? 0 : 18);
+          return (
+            <span
+              key={i}
+              style={{
+                display: "inline-block",
+                marginRight: i === c.words.length - 1 || next ? 0 : "0.26em",
+                opacity: t >= at - 0.05 ? 1 : 0,
+                transform: `scale(${interpolate(t, [at - 0.05, at + 0.1], [0.85, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
+                background: h ? C.aqua : "transparent",
+                borderRadius: `${r(prev)}px ${r(next)}px ${r(next)}px ${r(prev)}px`,
+                padding: h ? `0 ${next ? "0.26em" : "10px"} 0 ${prev ? 0 : "10px"}` : 0,
+              }}
+            >
+              {w}
+            </span>
+          );
+        })}
       </div>
     </div>
   );
@@ -418,23 +428,69 @@ const EndScreen: React.FC = () => {
   const from = TALK_FRAMES - 8;
   const bg = prog(frame, from, TALK_FRAMES);
   const a = usePop(TALK_END - 0.05);
-  const b = usePop(TALK_END + 0.25, 10);
+  const b = usePop(TALK_END + 0.25);
   if (frame < from) return null;
   return (
-    <AbsoluteFill style={{ background: C.ciruela, opacity: bg, alignItems: "center", justifyContent: "center", gap: 22 }}>
-      <svg width={150} height={150} viewBox="0 0 40 40" style={{ transform: `scale(${a})` }}>
-        <g fill="none" stroke={C.aqua} strokeWidth={4} strokeLinecap="round">
+    <AbsoluteFill style={{ background: C.blanco, opacity: bg, alignItems: "center", justifyContent: "center", gap: 30 }}>
+      <svg width={170} height={170} viewBox="-30 -30 60 60" style={{ transform: `scale(${a})` }}>
+        <circle r={27} fill={C.aqua} stroke={C.tinta} strokeWidth={3} />
+        <g fill="none" stroke={C.tinta} strokeWidth={3.4} strokeLinecap="round" transform="translate(-20 -20)">
           <path d="M17 23 L23 17" />
           <path d="M14 18 L9 23 a6 6 0 0 0 8 8 L22 26" />
           <path d="M18 14 L23 9 a6 6 0 0 1 8 8 L26 22" />
         </g>
       </svg>
-      <div style={{ fontFamily: POPPINS, fontWeight: 700, fontSize: 66, color: C.blanco, opacity: Math.min(a * 2, 1) }}>El link está en</div>
-      <div style={{ fontFamily: POPPINS, fontWeight: 700, fontSize: 80, lineHeight: 1.15, color: C.aqua, textAlign: "center", transform: `scale(${b})` }}>
+      <div style={{ fontFamily: POPPINS, fontWeight: 700, fontSize: 66, color: C.tinta, opacity: Math.min(a * 2, 1) }}>El link está en</div>
+      <div
+        style={{
+          fontFamily: POPPINS,
+          fontWeight: 700,
+          fontSize: 76,
+          lineHeight: 1.2,
+          color: C.tinta,
+          textAlign: "center",
+          background: C.aqua,
+          border: `5px solid ${C.tinta}`,
+          borderRadius: 40,
+          boxShadow: `12px 12px 0 ${C.tinta}`,
+          padding: "18px 44px 24px",
+          transform: `scale(${0.85 + 0.15 * b})`,
+          opacity: Math.min(b * 2, 1),
+        }}
+      >
         el primer comentario
         <br />y en mi bio
       </div>
     </AbsoluteFill>
+  );
+};
+
+// Etiqueta del tema arriba, como la píldora de sección del brandbook
+const TopicChip: React.FC = () => {
+  const t = useT();
+  const k = usePop(1.0);
+  if (t < 1.0 || t >= TALK_END) return null;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: 80,
+        top: 260,
+        padding: "10px 28px",
+        background: C.blanco,
+        border: `4px solid ${C.tinta}`,
+        borderRadius: 40,
+        boxShadow: `6px 6px 0 ${C.aqua}`,
+        fontFamily: POPPINS,
+        fontWeight: 700,
+        fontSize: 34,
+        color: C.tinta,
+        transform: `translateY(${(1 - k) * -30}px)`,
+        opacity: Math.min(k * 2, 1),
+      }}
+    >
+      Editar con IA
+    </div>
   );
 };
 
@@ -446,7 +502,7 @@ export const EditarIA: React.FC = () => {
   const zoom = useZoom();
 
   return (
-    <AbsoluteFill style={{ background: C.ciruela }}>
+    <AbsoluteFill style={{ background: C.blanco }}>
       <AbsoluteFill style={{ transform: `scale(${zoom})`, transformOrigin: "540px 700px" }}>
         <OffthreadVideo src={staticFile("toma.mp4")} />
       </AbsoluteFill>
@@ -465,6 +521,7 @@ export const EditarIA: React.FC = () => {
         <LinkScene />
       </Card>
 
+      <TopicChip />
       <Captions />
       <EndScreen />
     </AbsoluteFill>

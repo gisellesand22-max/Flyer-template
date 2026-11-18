@@ -154,6 +154,8 @@ Fuente pixelada para el toque tech. Úsala para: palabras clave, números, nombr
 4. **Transiciones:** simples. Corte directo o un zoom corto.
 5. **Efecto pixel:** un detalle retro por video (transición, sello o contador), no más.
 6. **Música:** que acompañe, nunca que tape tu voz.
+7. **Estilo visual:** interfaz limpia de app, como la tarjeta "Editando" de `paleta-color.webp`. Tarjetas blancas con borde tinta, esquinas muy redondeadas y sombra aqua sólida. Subtítulos en píldora blanca con la palabra clave sobre fondo aqua. Una etiqueta del tema arriba, también en píldora.
+8. **Movimiento:** entradas rápidas y suaves, con poco rebote.
 
 ### Elementos repetibles (crea una vez, reutiliza)
 
