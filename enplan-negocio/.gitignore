@@ -6,3 +6,5 @@ public/brand/
 output/*.mp4
 output/muestras/
 out/
+output/opciones/*.png
+output/opciones/*.jpg
