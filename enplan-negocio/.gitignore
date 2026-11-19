@@ -1,5 +1,8 @@
 node_modules/
 assets/
 public/*.mp4
+public/basico.png
+public/brand/
 output/*.mp4
+output/muestras/
 out/
