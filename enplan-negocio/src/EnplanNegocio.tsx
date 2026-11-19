@@ -48,49 +48,120 @@ const QUOTE: [string, number][] = [
   ["No", 13.7], ["hay", 14.0], ["nada", 14.1], ["que", 14.22], ["hacer", 14.4], ["aquí", 14.58],
 ];
 
-// Subtítulos: Work Sans en caja arena; la palabra clave en Montserrat 800 con subrayado lima
+// Momentos de palabra gigante: la frase chica arriba y la clave enorme
+type Big = { from: number; to: number; small: string; big: string; size: number; coins?: boolean };
+const BIG: Big[] = [
+  { from: 2.58, to: 3.9, small: "con el mundo de la", big: "INTELIGENCIA ARTIFICIAL", size: 112 },
+  { from: 21.2, to: 21.95, small: "que gasten un buen en", big: "META ADS", size: 150, coins: true },
+  { from: 30.44, to: 31.5, small: "vas a tener un", big: "DASHBOARD", size: 132 },
+  { from: 35.32, to: 36.25, small: "por solo", big: "$99", size: 190, coins: true },
+  { from: 36.72, to: 37.3, small: "o sea,", big: "NADA", size: 190 },
+];
+const bigAt = (t: number) => BIG.find((b) => t >= b.from && t < b.to);
+
+// Texto blanco con contorno carbón, para leerse sobre el video sin caja
+const OUTLINE: React.CSSProperties = { color: C.blanco, WebkitTextStroke: `10px ${C.carbon}`, paintOrder: "stroke fill" };
+
+// Subtítulos karaoke: aparecen al decirse y la palabra actual salta a una píldora lima
 const Captions: React.FC<{ frame: number }> = ({ frame }) => {
   const t = frame / 30;
   const c = CAPTIONS.find((x) => t >= x.words[0][1] && t < x.end);
-  if (!c || frame >= TALK_END) return null;
+  if (!c || frame >= TALK_END || bigAt(t)) return null;
+  const spoken = c.words.filter(([, at]) => t >= at - 0.05).length;
   return (
-    <div style={{ position: "absolute", top: 1170, left: SAFE.left, width: SAFE.right - SAFE.left, display: "flex", justifyContent: "center" }}>
-      <div style={{ background: C.arena, borderRadius: 40, padding: "14px 34px 18px", fontFamily: APOYO, fontWeight: 600, fontSize: 50, color: C.carbon, textAlign: "center", lineHeight: 1.2 }}>
-        {c.words.map(([w, at], i) => {
-          const key = c.hl.includes(i);
-          const line = ramp(frame, s(at), s(at) + 9);
-          return (
-            <span
-              key={i}
-              style={{
-                position: "relative",
-                display: "inline-block",
-                marginRight: i < c.words.length - 1 ? "0.28em" : 0,
-                opacity: t >= at - 0.05 ? 1 : 0,
-                fontFamily: key ? TITULAR : APOYO,
-                fontWeight: key ? 800 : 600,
-              }}
-            >
-              {key && (
-                <span
-                  style={{
-                    position: "absolute",
-                    left: -2,
-                    right: -2,
-                    bottom: 4,
-                    height: 14,
-                    borderRadius: 7,
-                    background: C.lima,
-                    transform: `scaleX(${line})`,
-                    transformOrigin: "left",
-                  }}
-                />
-              )}
-              <span style={{ position: "relative" }}>{w}</span>
-            </span>
-          );
-        })}
+    <div style={{ position: "absolute", top: 1100, left: 60, right: 60, textAlign: "center", fontFamily: TITULAR, fontWeight: 800, fontSize: 76, lineHeight: 1.18 }}>
+      {c.words.slice(0, spoken).map(([w, at], i) => (
+        <Word key={i} w={w} at={at} on active={i === spoken - 1} frame={frame} last={i === spoken - 1} />
+      ))}
+    </div>
+  );
+};
+const Word: React.FC<{ w: string; at: number; on: boolean; active: boolean; frame: number; last: boolean }> = ({ w, at, on, active, frame, last }) => {
+  const p = usePop(s(at) - 1, 10);
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        marginRight: last ? 0 : "0.24em",
+        opacity: on ? 1 : 0,
+        transform: `scale(${0.6 + 0.4 * p}) rotate(${active ? -3 : 0}deg)`,
+        ...(active
+          ? { background: C.lima, color: C.carbon, border: `5px solid ${C.carbon}`, borderRadius: 22, padding: "0 16px 4px", boxShadow: `7px 7px 0 ${C.carbon}` }
+          : OUTLINE),
+      }}
+    >
+      {w}
+    </span>
+  );
+};
+
+// Palabra gigante con monedas, en los momentos clave
+const BigWord: React.FC<{ frame: number }> = ({ frame }) => {
+  const t = frame / 30;
+  const b = bigAt(t);
+  const p = usePop(b ? s(b.from) : 0, 9);
+  if (!b || frame >= TALK_END) return null;
+  const out = 1 - ramp(frame, s(b.to) - 4, s(b.to));
+  const k = ramp(frame, s(b.from), s(b.from) + 14);
+  const coins: [number, number, number][] = [
+    [-420, -60, 90],
+    [420, -120, 64],
+    [-340, 200, 60],
+    [360, 190, 84],
+  ];
+  return (
+    <div style={{ position: "absolute", top: 1090, left: 0, width: 1080, display: "flex", flexDirection: "column", alignItems: "center", gap: 10, opacity: out }}>
+      <div style={{ background: C.carbon, borderRadius: 30, padding: "8px 26px 12px", fontFamily: APOYO, fontWeight: 600, fontSize: 46, color: C.blanco }}>{b.small}</div>
+      <div
+        style={{
+          fontFamily: TITULAR,
+          fontWeight: 800,
+          fontSize: b.size,
+          lineHeight: 1,
+          textAlign: "center",
+          maxWidth: 1000,
+          color: C.lima,
+          WebkitTextStroke: `14px ${C.carbon}`,
+          paintOrder: "stroke fill",
+          textShadow: `12px 12px 0 ${C.carbon}`,
+          transform: `rotate(-4deg) scale(${1.6 - 0.6 * p})`,
+          opacity: Math.min(p * 2, 1),
+        }}
+      >
+        {b.big}
       </div>
+      {b.coins &&
+        coins.map(([dx, dy, size], i) => (
+          <svg
+            key={i}
+            width={size}
+            height={size}
+            viewBox="-28 -28 56 56"
+            style={{ position: "absolute", left: 540 + dx * k - size / 2, top: 140 + dy * k - size / 2, transform: `rotate(${(i % 2 ? 1 : -1) * 30 * k}deg) scale(${k})` }}
+          >
+            <circle r={24} fill={C.lima} stroke={C.carbon} strokeWidth={4} />
+            <text y={11} textAnchor="middle" fontFamily={TITULAR} fontWeight={800} fontSize={32} fill={C.carbon}>
+              $
+            </text>
+          </svg>
+        ))}
+    </div>
+  );
+};
+
+// Zoom rápido al video en cada palabra gigante
+const useZoom = (frame: number) => {
+  let k = 0;
+  for (const b of BIG) k = Math.max(k, ramp(frame, s(b.from), s(b.from) + 5) * (1 - ramp(frame, s(b.to) - 6, s(b.to))));
+  return 1 + 0.1 * k;
+};
+
+// Barra de avance arriba
+const Progress: React.FC<{ frame: number }> = ({ frame }) => {
+  if (frame >= TALK_END) return null;
+  return (
+    <div style={{ position: "absolute", left: 80, right: 80, top: 230, height: 16, borderRadius: 8, background: C.arena, border: `3px solid ${C.carbon}` }}>
+      <div style={{ width: `${(frame / TALK_END) * 100}%`, height: "100%", borderRadius: 8, background: C.lima }} />
     </div>
   );
 };
@@ -138,22 +209,6 @@ const pill = (bg: string): React.CSSProperties => ({
   color: C.carbon,
   whiteSpace: "nowrap",
 });
-
-// 2,5 a 4,4 s: inteligencia artificial
-const IACard: React.FC<{ frame: number }> = ({ frame }) => (
-  <Card frame={frame} from={s(2.5)} to={s(4.45)}>
-    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: 30 }}>
-      <Pop frame={frame} at={2.58} style={{ width: 130, height: 130, borderRadius: 65, background: C.lima, border: `5px solid ${C.carbon}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: TITULAR, fontWeight: 800, fontSize: 56, color: C.carbon, boxSizing: "border-box" }}>
-        IA
-      </Pop>
-      <Pop frame={frame} at={3.08} style={{ fontFamily: TITULAR, fontWeight: 800, fontSize: 48, color: C.carbon, lineHeight: 1.1 }}>
-        Inteligencia
-        <br />
-        artificial
-      </Pop>
-    </div>
-  </Card>
-);
 
 // 4,45 a 10,7 s: herramientas para mí, para mis amigos y para mi ciudad
 const Tile: React.FC<{ label: string; lima?: boolean }> = ({ label, lima }) => (
@@ -222,7 +277,7 @@ const Location: React.FC<{ frame: number }> = ({ frame }) => {
 // 13,6 a 15,45 s: la queja como cita
 const Quote: React.FC<{ frame: number }> = ({ frame }) => {
   const from = s(13.6);
-  const to = s(15.45);
+  const to = s(15.06);
   const p = usePop(from, 12);
   if (frame < from || frame >= to) return null;
   const out = 1 - ramp(frame, to - T, to);
@@ -293,7 +348,7 @@ const Person: React.FC<{ q: number }> = ({ q }) => (
 const WhoCard: React.FC<{ frame: number }> = ({ frame }) => {
   const q = [usePop(s(23.4), 9), usePop(s(23.48), 9), usePop(s(23.56), 9)];
   return (
-    <Card frame={frame} from={s(21.78)} to={s(24.45)}>
+    <Card frame={frame} from={s(21.95)} to={s(23.95)}>
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: 26 }}>
         <Img src={staticFile("brand/icons/tiendas.webp")} style={{ width: 170, height: 170, objectFit: "contain" }} />
         {q.map((k, i) => (
@@ -304,16 +359,46 @@ const WhoCard: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
-// 24,5 a 26,28 s: el logo antes de la app
-const LogoCard: React.FC<{ frame: number }> = ({ frame }) => (
-  <Card frame={frame} from={s(24.5)} to={PHONE_FROM + 4} bg={C.arena}>
-    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <Pop frame={frame} at={24.6}>
-        <Img src={staticFile("brand/logo/enplan_logo_carbon_sobre_arena.svg")} style={{ width: 460 }} />
-      </Pop>
-    </div>
-  </Card>
-);
+// 23,95 a 26,28 s: encuesta para invitar a comentar (texto nuevo, no lo dices en el video)
+const Poll: React.FC<{ frame: number }> = ({ frame }) => {
+  const tap = s(25.0);
+  const ring = ramp(frame, tap, tap + 10);
+  const chosen = frame >= tap;
+  const cur = ramp(frame, s(24.3), tap);
+  return (
+    <Card frame={frame} from={s(23.95)} to={PHONE_FROM + 4}>
+      <div style={{ position: "absolute", left: 30, top: 20, fontFamily: TITULAR, fontWeight: 800, fontSize: 34, color: C.carbon }}>¿Tu negocio también paga por flyers?</div>
+      <div style={{ position: "absolute", left: 30, right: 30, top: 96, display: "flex", gap: 20 }}>
+        {(["Sí", "No"] as const).map((o) => (
+          <div
+            key={o}
+            style={{
+              flex: 1,
+              height: 80,
+              borderRadius: 40,
+              border: `4px solid ${C.carbon}`,
+              background: o === "Sí" && chosen ? C.lima : C.arena,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontFamily: TITULAR,
+              fontWeight: 800,
+              fontSize: 40,
+              color: C.carbon,
+              transform: `scale(${o === "Sí" && frame >= tap && frame < tap + 4 ? 0.94 : 1})`,
+            }}
+          >
+            {o}
+          </div>
+        ))}
+      </div>
+      {chosen && <div style={{ position: "absolute", left: 210 - 50 * ring, top: 136 - 50 * ring, width: 100 * ring, height: 100 * ring, borderRadius: 100, border: `6px solid ${C.lima}`, opacity: 1 - ring }} />}
+      <svg width={60} height={76} viewBox="0 0 50 64" style={{ position: "absolute", left: 520 - 310 * cur, top: 210 - 74 * cur }}>
+        <path d="M4 4 L4 50 L16 39 L25 58 L34 54 L25 35 L42 35 Z" fill={C.blanco} stroke={C.carbon} strokeWidth={4} strokeLinejoin="round" />
+      </svg>
+    </Card>
+  );
+};
 
 // Celular con el canje real
 const BEZEL = 18;
@@ -334,7 +419,22 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
         </Sequence>
       </div>
       <div style={{ position: "absolute", top: BEZEL + 10, left: PW / 2 - 40, width: 80, height: 18, borderRadius: 9, background: C.carbon }} />
+      <Tap frame={frame} at={PHONE_FROM + 142} x={BEZEL + 540 * (SW / 1080)} y={BEZEL + 1824 * (SW / 1080)} />
     </div>
+  );
+};
+
+// Círculo lima donde se toca la pantalla
+const Tap: React.FC<{ frame: number; at: number; x: number; y: number }> = ({ frame, at, x, y }) => {
+  if (frame < at - 6 || frame > at + 14) return null;
+  const k = ramp(frame, at, at + 14);
+  const pre = ramp(frame, at - 6, at);
+  const r = 18 + 40 * k;
+  return (
+    <>
+      <div style={{ position: "absolute", left: x - 18, top: y - 18, width: 36, height: 36, borderRadius: 18, background: C.lima, border: `4px solid ${C.carbon}`, opacity: frame < at ? pre : 1 - k, boxSizing: "border-box" }} />
+      {frame >= at && <div style={{ position: "absolute", left: x - r, top: y - r, width: r * 2, height: r * 2, borderRadius: r, border: `5px solid ${C.lima}`, opacity: 1 - k }} />}
+    </>
   );
 };
 
@@ -382,7 +482,7 @@ const BasicCard: React.FC<{ frame: number }> = ({ frame }) => {
   const ring = usePop(s(35.32), 9);
   if (frame < from || frame >= TALK_END) return null;
   const out = 1 - ramp(frame, TALK_END - T, TALK_END);
-  const sc = 0.6;
+  const sc = 0.55;
   const w = 960 * sc;
   const h = 880 * sc;
   return (
@@ -390,7 +490,7 @@ const BasicCard: React.FC<{ frame: number }> = ({ frame }) => {
       style={{
         position: "absolute",
         left: 540 - w / 2,
-        top: 1290,
+        top: 1390,
         width: w,
         height: h,
         transform: `perspective(1600px) rotateY(${12 * p + Math.sin((frame - from) / 14) * 2}deg) rotateX(${5 * p}deg) translateY(${(1 - p) * 500}px)`,
@@ -461,17 +561,23 @@ const Close: React.FC<{ frame: number }> = ({ frame }) => {
 export const EnplanNegocio: React.FC = () => {
   useBrandFonts();
   const frame = useCurrentFrame();
+  const zoom = useZoom(frame);
   return (
     <AbsoluteFill style={{ background: C.arena }}>
-      {frame < TALK_END + T && <OffthreadVideo src={staticFile("toma.mp4")} endAt={TALK_END} />}
+      {frame < TALK_END + T && (
+        <AbsoluteFill style={{ transform: `scale(${zoom})`, transformOrigin: "540px 620px" }}>
+          <OffthreadVideo src={staticFile("toma.mp4")} endAt={TALK_END} />
+        </AbsoluteFill>
+      )}
+      <Progress frame={frame} />
       <Captions frame={frame} />
-      <IACard frame={frame} />
+      <BigWord frame={frame} />
       <ToolsCard frame={frame} />
       <Location frame={frame} />
       <Quote frame={frame} />
       <SpendCard frame={frame} />
       <WhoCard frame={frame} />
-      <LogoCard frame={frame} />
+      <Poll frame={frame} />
       <Phone frame={frame} />
       <RedeemCallout frame={frame} />
       <BasicCard frame={frame} />
