@@ -50,54 +50,48 @@ const QUOTE: [string, number][] = [
 // Clip de la app en estilo cinemático: tu video desenfocado y la app flotando en 3D
 const cinematic = (frame: number) => ramp(frame, PHONE_FROM - 6, PHONE_FROM + 6) * (1 - ramp(frame, PHONE_TO, PHONE_TO + T));
 
-// Tamaño según la palabra: las clave grandes, las cortas pequeñas
-const wordSize = (w: string, key: boolean) => (key ? 112 : w.replace(/[^a-záéíóúñü0-9$]/gi, "").length <= 3 ? 50 : 72);
-
-// Subtítulos karaoke cinéticos: cada palabra aparece al decirse, con su propio tamaño.
-// Las palabras clave quedan en lima; la que estás diciendo crece un poco.
+// Subtítulos normales (estilo 1): la frase completa a la vez, en Work Sans blanco con sombra
+// carbón suave. Las palabras clave van juntas en Montserrat lima, un poco más grandes. Solo un fundido corto.
 const Captions: React.FC<{ frame: number }> = ({ frame }) => {
   const t = frame / 30;
   const c = CAPTIONS.find((x) => t >= x.words[0][1] && t < x.end);
   if (!c || frame >= TALK_END) return null;
-  const spoken = c.words.filter(([, at]) => t >= at - 0.05).length;
-  const top = 1090 + 280 * cinematic(frame);
+  const a = s(c.words[0][1]);
+  const b = s(c.end);
+  const k = ramp(frame, a, a + 4) * (1 - ramp(frame, b - 4, b));
+  // Agrupa palabras seguidas con el mismo estilo
+  const runs: { text: string; hl: boolean }[] = [];
+  c.words.forEach(([w], i) => {
+    const hl = c.hl.includes(i);
+    const last = runs[runs.length - 1];
+    if (last && last.hl === hl) last.text += ` ${w}`;
+    else runs.push({ text: w, hl });
+  });
   return (
-    <div style={{ position: "absolute", top, left: 50, right: 50, display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "baseline", columnGap: 18, rowGap: 0 }}>
-      {c.words.slice(0, spoken).map(([w, at], i) => (
-        <Word key={i} w={w} at={at} active={i === spoken - 1} keyWord={c.hl.includes(i)} />
+    <div
+      style={{
+        position: "absolute",
+        top: 1150 + 220 * cinematic(frame),
+        left: 80,
+        right: 80,
+        textAlign: "center",
+        fontFamily: APOYO,
+        fontWeight: 600,
+        fontSize: 58,
+        lineHeight: 1.2,
+        color: C.blanco,
+        textShadow: `0 4px 14px ${C.carbon}, 0 2px 0 ${C.carbon}`,
+        opacity: k,
+      }}
+    >
+      {runs.map((r, i) => (
+        <span key={i} style={r.hl ? { fontFamily: TITULAR, fontWeight: 800, fontSize: 68, color: C.lima, whiteSpace: "nowrap" } : undefined}>
+          {i > 0 ? " " : ""}
+          {r.text}
+        </span>
       ))}
     </div>
   );
-};
-const Word: React.FC<{ w: string; at: number; active: boolean; keyWord: boolean }> = ({ w, at, active, keyWord }) => {
-  const p = usePop(s(at) - 1, 9);
-  const size = wordSize(w, keyWord);
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        fontFamily: TITULAR,
-        fontWeight: 800,
-        fontSize: size,
-        lineHeight: 1.08,
-        color: keyWord ? C.lima : C.blanco,
-        WebkitTextStroke: `${Math.round(size * 0.13)}px ${C.carbon}`,
-        paintOrder: "stroke fill",
-        transform: `translateY(${(1 - p) * 30}px) scale(${(0.5 + 0.5 * p) * (active ? 1.1 : 1)}) rotate(${active && keyWord ? -3 : 0}deg)`,
-        opacity: Math.min(p * 2, 1),
-      }}
-    >
-      {w}
-    </span>
-  );
-};
-
-// Zoom corto al video en cada palabra clave
-const KEY_TIMES = CAPTIONS.flatMap((c) => c.hl.map((i) => c.words[i][1]));
-const useZoom = (frame: number) => {
-  let k = 0;
-  for (const at of KEY_TIMES) k = Math.max(k, ramp(frame, s(at), s(at) + 4) * (1 - ramp(frame, s(at) + 10, s(at) + 20)));
-  return 1 + 0.05 * k;
 };
 
 // Barra de avance arriba
@@ -487,7 +481,7 @@ const Close: React.FC<{ frame: number }> = ({ frame }) => {
 export const EnplanNegocio: React.FC = () => {
   useBrandFonts();
   const frame = useCurrentFrame();
-  const zoom = useZoom(frame);
+  const zoom = 1;
   const cine = cinematic(frame);
   return (
     <AbsoluteFill style={{ background: C.arena }}>
