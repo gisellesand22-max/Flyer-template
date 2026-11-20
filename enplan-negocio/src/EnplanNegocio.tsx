@@ -4,7 +4,7 @@ import { APOYO, C, ramp, SAFE, T, TITULAR, useBrandFonts, usePop } from "./brand
 
 // Tiempos en segundos del video ya sin silencios (public/toma.mp4)
 const s = (sec: number) => Math.round(sec * 30);
-const TALK_END = 1119; // 37,3 s
+const TALK_END = 1089; // 36,3 s: termina en "99 pesos"
 export const TOTAL = TALK_END + 60; // cierre de 2 s
 const PHONE_FROM = s(26.28); // "aplicación"
 const PHONE_TO = s(33.24); // "quién ha visto"
@@ -41,53 +41,50 @@ const CAPTIONS: Chunk[] = [
   { words: [["donde", 30.78], ["vas", 31.12], ["a", 31.32], ["ver", 31.44]], end: 31.62, hl: [3] },
   { words: [["quién", 31.62], ["ha", 31.88], ["canjeado", 32.02], ["tus", 32.42], ["promos,", 32.6]], end: 33.24, hl: [2] },
   { words: [["quién", 33.24], ["ha", 33.38], ["visto", 33.68], ["tu", 33.9], ["negocio,", 34.08]], end: 34.6, hl: [2] },
-  { words: [["por", 34.6], ["solo", 35.12], ["99", 35.32], ["pesos,", 35.82]], end: 36.2, hl: [2, 3] },
-  { words: [["o", 36.27], ["sea,", 36.35], ["nada.", 36.72]], end: 37.4, hl: [2] },
+  { words: [["por", 34.6], ["solo", 35.12], ["99", 35.32], ["pesos.", 35.82]], end: 36.4, hl: [2, 3] },
 ];
 const QUOTE: [string, number][] = [
   ["No", 13.7], ["hay", 14.0], ["nada", 14.1], ["que", 14.22], ["hacer", 14.4], ["aquí", 14.58],
 ];
 
-// Momentos de palabra gigante: la frase chica arriba y la clave enorme
-type Big = { from: number; to: number; small: string; big: string; size: number; coins?: boolean };
-const BIG: Big[] = [
-  { from: 2.58, to: 3.9, small: "con el mundo de la", big: "INTELIGENCIA ARTIFICIAL", size: 112 },
-  { from: 21.2, to: 21.95, small: "que gasten un buen en", big: "META ADS", size: 150, coins: true },
-  { from: 30.44, to: 31.5, small: "vas a tener un", big: "DASHBOARD", size: 132 },
-  { from: 35.32, to: 36.25, small: "por solo", big: "$99", size: 190, coins: true },
-  { from: 36.72, to: 37.3, small: "o sea,", big: "NADA", size: 190 },
-];
-const bigAt = (t: number) => BIG.find((b) => t >= b.from && t < b.to);
+// Clip de la app en estilo cinemático: tu video desenfocado y la app flotando en 3D
+const cinematic = (frame: number) => ramp(frame, PHONE_FROM - 6, PHONE_FROM + 6) * (1 - ramp(frame, PHONE_TO, PHONE_TO + T));
 
-// Texto blanco con contorno carbón, para leerse sobre el video sin caja
-const OUTLINE: React.CSSProperties = { color: C.blanco, WebkitTextStroke: `10px ${C.carbon}`, paintOrder: "stroke fill" };
+// Tamaño según la palabra: las clave grandes, las cortas pequeñas
+const wordSize = (w: string, key: boolean) => (key ? 112 : w.replace(/[^a-záéíóúñü0-9$]/gi, "").length <= 3 ? 50 : 72);
 
-// Subtítulos karaoke: aparecen al decirse y la palabra actual salta a una píldora lima
+// Subtítulos karaoke cinéticos: cada palabra aparece al decirse, con su propio tamaño.
+// Las palabras clave quedan en lima; la que estás diciendo crece un poco.
 const Captions: React.FC<{ frame: number }> = ({ frame }) => {
   const t = frame / 30;
   const c = CAPTIONS.find((x) => t >= x.words[0][1] && t < x.end);
-  if (!c || frame >= TALK_END || bigAt(t)) return null;
+  if (!c || frame >= TALK_END) return null;
   const spoken = c.words.filter(([, at]) => t >= at - 0.05).length;
+  const top = 1090 + 280 * cinematic(frame);
   return (
-    <div style={{ position: "absolute", top: 1100, left: 60, right: 60, textAlign: "center", fontFamily: TITULAR, fontWeight: 800, fontSize: 76, lineHeight: 1.18 }}>
+    <div style={{ position: "absolute", top, left: 50, right: 50, display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "baseline", columnGap: 18, rowGap: 0 }}>
       {c.words.slice(0, spoken).map(([w, at], i) => (
-        <Word key={i} w={w} at={at} on active={i === spoken - 1} frame={frame} last={i === spoken - 1} />
+        <Word key={i} w={w} at={at} active={i === spoken - 1} keyWord={c.hl.includes(i)} />
       ))}
     </div>
   );
 };
-const Word: React.FC<{ w: string; at: number; on: boolean; active: boolean; frame: number; last: boolean }> = ({ w, at, on, active, frame, last }) => {
-  const p = usePop(s(at) - 1, 10);
+const Word: React.FC<{ w: string; at: number; active: boolean; keyWord: boolean }> = ({ w, at, active, keyWord }) => {
+  const p = usePop(s(at) - 1, 9);
+  const size = wordSize(w, keyWord);
   return (
     <span
       style={{
         display: "inline-block",
-        marginRight: last ? 0 : "0.24em",
-        opacity: on ? 1 : 0,
-        transform: `scale(${0.6 + 0.4 * p}) rotate(${active ? -3 : 0}deg)`,
-        ...(active
-          ? { background: C.lima, color: C.carbon, border: `5px solid ${C.carbon}`, borderRadius: 22, padding: "0 16px 4px", boxShadow: `7px 7px 0 ${C.carbon}` }
-          : OUTLINE),
+        fontFamily: TITULAR,
+        fontWeight: 800,
+        fontSize: size,
+        lineHeight: 1.08,
+        color: keyWord ? C.lima : C.blanco,
+        WebkitTextStroke: `${Math.round(size * 0.13)}px ${C.carbon}`,
+        paintOrder: "stroke fill",
+        transform: `translateY(${(1 - p) * 30}px) scale(${(0.5 + 0.5 * p) * (active ? 1.1 : 1)}) rotate(${active && keyWord ? -3 : 0}deg)`,
+        opacity: Math.min(p * 2, 1),
       }}
     >
       {w}
@@ -95,65 +92,12 @@ const Word: React.FC<{ w: string; at: number; on: boolean; active: boolean; fram
   );
 };
 
-// Palabra gigante con monedas, en los momentos clave
-const BigWord: React.FC<{ frame: number }> = ({ frame }) => {
-  const t = frame / 30;
-  const b = bigAt(t);
-  const p = usePop(b ? s(b.from) : 0, 9);
-  if (!b || frame >= TALK_END) return null;
-  const out = 1 - ramp(frame, s(b.to) - 4, s(b.to));
-  const k = ramp(frame, s(b.from), s(b.from) + 14);
-  const coins: [number, number, number][] = [
-    [-420, -60, 90],
-    [420, -120, 64],
-    [-340, 200, 60],
-    [360, 190, 84],
-  ];
-  return (
-    <div style={{ position: "absolute", top: 1090, left: 0, width: 1080, display: "flex", flexDirection: "column", alignItems: "center", gap: 10, opacity: out }}>
-      <div style={{ background: C.carbon, borderRadius: 30, padding: "8px 26px 12px", fontFamily: APOYO, fontWeight: 600, fontSize: 46, color: C.blanco }}>{b.small}</div>
-      <div
-        style={{
-          fontFamily: TITULAR,
-          fontWeight: 800,
-          fontSize: b.size,
-          lineHeight: 1,
-          textAlign: "center",
-          maxWidth: 1000,
-          color: C.lima,
-          WebkitTextStroke: `14px ${C.carbon}`,
-          paintOrder: "stroke fill",
-          textShadow: `12px 12px 0 ${C.carbon}`,
-          transform: `rotate(-4deg) scale(${1.6 - 0.6 * p})`,
-          opacity: Math.min(p * 2, 1),
-        }}
-      >
-        {b.big}
-      </div>
-      {b.coins &&
-        coins.map(([dx, dy, size], i) => (
-          <svg
-            key={i}
-            width={size}
-            height={size}
-            viewBox="-28 -28 56 56"
-            style={{ position: "absolute", left: 540 + dx * k - size / 2, top: 140 + dy * k - size / 2, transform: `rotate(${(i % 2 ? 1 : -1) * 30 * k}deg) scale(${k})` }}
-          >
-            <circle r={24} fill={C.lima} stroke={C.carbon} strokeWidth={4} />
-            <text y={11} textAnchor="middle" fontFamily={TITULAR} fontWeight={800} fontSize={32} fill={C.carbon}>
-              $
-            </text>
-          </svg>
-        ))}
-    </div>
-  );
-};
-
-// Zoom rápido al video en cada palabra gigante
+// Zoom corto al video en cada palabra clave
+const KEY_TIMES = CAPTIONS.flatMap((c) => c.hl.map((i) => c.words[i][1]));
 const useZoom = (frame: number) => {
   let k = 0;
-  for (const b of BIG) k = Math.max(k, ramp(frame, s(b.from), s(b.from) + 5) * (1 - ramp(frame, s(b.to) - 6, s(b.to))));
-  return 1 + 0.1 * k;
+  for (const at of KEY_TIMES) k = Math.max(k, ramp(frame, s(at), s(at) + 4) * (1 - ramp(frame, s(at) + 10, s(at) + 20)));
+  return 1 + 0.05 * k;
 };
 
 // Barra de avance arriba
@@ -209,33 +153,6 @@ const pill = (bg: string): React.CSSProperties => ({
   color: C.carbon,
   whiteSpace: "nowrap",
 });
-
-// 4,45 a 10,7 s: herramientas para mí, para mis amigos y para mi ciudad
-const Tile: React.FC<{ label: string; lima?: boolean }> = ({ label, lima }) => (
-  <div style={{ width: 250, height: 150, borderRadius: 28, border: `4px solid ${C.carbon}`, background: lima ? C.lima : C.arena, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 18, boxSizing: "border-box" }}>
-    <div style={{ display: "flex", gap: 8 }}>
-      {[0, 1, 2].map((i) => (
-        <div key={i} style={{ width: 26, height: 26, borderRadius: 8, background: i === 0 ? C.carbon : lima ? C.blanco : C.arenaOscuro }} />
-      ))}
-    </div>
-    <div style={{ fontFamily: TITULAR, fontWeight: 800, fontSize: 30, color: C.carbon, lineHeight: 1.1 }}>{label}</div>
-  </div>
-);
-const ToolsCard: React.FC<{ frame: number }> = ({ frame }) => (
-  <Card frame={frame} from={s(5.7)} to={s(10.75)}>
-    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: 24 }}>
-      <Pop frame={frame} at={5.78}>
-        <Tile label="Para mí" />
-      </Pop>
-      <Pop frame={frame} at={6.4}>
-        <Tile label="Para mis amigos" />
-      </Pop>
-      <Pop frame={frame} at={8.7}>
-        <Tile label="Para mi ciudad" lima />
-      </Pop>
-    </div>
-  </Card>
-);
 
 // 10,75 a 12,3 s: Aguascalientes
 const Location: React.FC<{ frame: number }> = ({ frame }) => {
@@ -401,18 +318,34 @@ const Poll: React.FC<{ frame: number }> = ({ frame }) => {
 };
 
 // Celular con el canje real
-const BEZEL = 18;
-const PH = 600;
+const BEZEL = 22;
+const PH = 1000;
 const SW = Math.round((PH - BEZEL * 2) * (1080 / 1920));
 const PW = SW + BEZEL * 2;
 const PL = Math.round((1080 - PW) / 2);
-const PT = 1300;
+const PT = 330;
 const Phone: React.FC<{ frame: number }> = ({ frame }) => {
-  const enter = usePop(PHONE_FROM, 13);
+  const enter = usePop(PHONE_FROM, 15);
   if (frame < PHONE_FROM || frame >= PHONE_TO + T) return null;
   const out = 1 - ramp(frame, PHONE_TO, PHONE_TO + T);
+  // Gira hacia ti cuando dices "canjeado"
+  const face = ramp(frame, s(31.9), s(32.4));
   return (
-    <div style={{ position: "absolute", left: PL, top: PT + (1 - enter) * 700, width: PW, height: PH, background: C.carbon, borderRadius: 56, boxShadow: `14px 14px 0 ${C.arenaOscuro}`, opacity: out }}>
+    <div
+      style={{
+        position: "absolute",
+        left: PL,
+        top: PT,
+        width: PW,
+        height: PH,
+        background: C.carbon,
+        borderRadius: 75,
+        boxShadow: `0 0 0 5px ${C.lima}`,
+        opacity: out,
+        transformStyle: "preserve-3d",
+        transform: `perspective(1800px) translateY(${(1 - enter) * 1100}px) rotateY(${-14 + 10 * face + Math.sin(frame / 25) * 1.5}deg) rotateX(${5 - 3 * face}deg)`,
+      }}
+    >
       <div style={{ position: "absolute", left: BEZEL, top: BEZEL, width: SW, height: PH - BEZEL * 2, borderRadius: 40, overflow: "hidden", background: C.arena }}>
         <Sequence from={PHONE_FROM} layout="none">
           <OffthreadVideo src={staticFile("canje.mp4")} muted style={{ width: SW, height: PH - BEZEL * 2 }} />
@@ -420,6 +353,7 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
       </div>
       <div style={{ position: "absolute", top: BEZEL + 10, left: PW / 2 - 40, width: 80, height: 18, borderRadius: 9, background: C.carbon }} />
       <Tap frame={frame} at={PHONE_FROM + 142} x={BEZEL + 540 * (SW / 1080)} y={BEZEL + 1824 * (SW / 1080)} />
+      <RedeemCallout frame={frame} />
     </div>
   );
 };
@@ -438,38 +372,30 @@ const Tap: React.FC<{ frame: number; at: number; x: number; y: number }> = ({ fr
   );
 };
 
-// "Muestra al negocio" sale del celular en 3D cuando dices "canjeado"
+// "Muestra al negocio" se despega del celular hacia ti cuando dices "canjeado"
 const RedeemCallout: React.FC<{ frame: number }> = ({ frame }) => {
   const from = s(32.02);
-  const to = PHONE_TO + 6;
   const p = usePop(from, 14);
-  if (frame < from || frame >= to) return null;
-  const out = 1 - ramp(frame, to - T, to);
+  if (frame < from) return null;
   const [x, y, w, h] = [50, 830, 980, 395];
-  const sc = 0.8;
   const k = SW / 1080;
-  const sx = PL + BEZEL + (x + w / 2) * k;
-  const sy = PT + BEZEL + (y + h / 2) * k;
-  const cx = 540;
-  const cy = 1430;
-  const s0 = k / sc;
   return (
     <div
       style={{
         position: "absolute",
-        left: sx + (cx - sx) * p - (w * sc) / 2,
-        top: sy + (cy - sy) * p - (h * sc) / 2,
-        width: w * sc,
-        height: h * sc,
-        transform: `perspective(1600px) rotateY(${-12 * p + Math.sin((frame - from) / 14) * 2.5}deg) rotateX(${6 * p}deg) scale(${(s0 + (1 - s0) * p) * (0.9 + 0.1 * out)})`,
-        opacity: Math.min(p * 2, 1) * out,
+        left: BEZEL + x * k,
+        top: BEZEL + y * k,
+        width: w * k,
+        height: h * k,
+        borderRadius: 26,
+        overflow: "hidden",
+        boxShadow: `0 0 0 ${6 * p}px ${C.lima}`,
+        transform: `translateZ(${160 * p}px) scale(${1 + 0.12 * p})`,
       }}
     >
-      <div style={{ position: "absolute", inset: 0, borderRadius: 36, border: `7px solid ${C.lima}`, background: C.blanco, overflow: "hidden", boxShadow: `20px 20px 0 ${C.carbon}` }}>
-        <Sequence from={PHONE_FROM} layout="none">
-          <OffthreadVideo src={staticFile("canje.mp4")} muted style={{ position: "absolute", left: -x * sc - 7, top: -y * sc - 7, width: 1080 * sc, height: 1920 * sc, maxWidth: "none" }} />
-        </Sequence>
-      </div>
+      <Sequence from={PHONE_FROM} layout="none">
+        <OffthreadVideo src={staticFile("canje.mp4")} muted style={{ position: "absolute", left: -x * k, top: -y * k, width: 1080 * k, height: 1920 * k, maxWidth: "none" }} />
+      </Sequence>
     </div>
   );
 };
@@ -562,24 +488,23 @@ export const EnplanNegocio: React.FC = () => {
   useBrandFonts();
   const frame = useCurrentFrame();
   const zoom = useZoom(frame);
+  const cine = cinematic(frame);
   return (
     <AbsoluteFill style={{ background: C.arena }}>
       {frame < TALK_END + T && (
-        <AbsoluteFill style={{ transform: `scale(${zoom})`, transformOrigin: "540px 620px" }}>
+        <AbsoluteFill style={{ transform: `scale(${zoom * (1 + 0.08 * cine)})`, transformOrigin: "540px 620px", filter: cine > 0 ? `blur(${18 * cine}px)` : undefined }}>
           <OffthreadVideo src={staticFile("toma.mp4")} endAt={TALK_END} />
         </AbsoluteFill>
       )}
+      <AbsoluteFill style={{ background: C.carbon, opacity: 0.62 * cine }} />
       <Progress frame={frame} />
-      <Captions frame={frame} />
-      <BigWord frame={frame} />
-      <ToolsCard frame={frame} />
       <Location frame={frame} />
       <Quote frame={frame} />
       <SpendCard frame={frame} />
       <WhoCard frame={frame} />
       <Poll frame={frame} />
       <Phone frame={frame} />
-      <RedeemCallout frame={frame} />
+      <Captions frame={frame} />
       <BasicCard frame={frame} />
       <Close frame={frame} />
     </AbsoluteFill>
