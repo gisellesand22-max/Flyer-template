@@ -2,6 +2,7 @@ import { Composition } from "remotion";
 import { EnplanNegocio, TOTAL } from "./EnplanNegocio";
 import { Opcion } from "./Opciones";
 import { Refinado } from "./Refinados";
+import { Subtitulo } from "./Subtitulos";
 
 export const Root: React.FC = () => (
   <>
@@ -10,5 +11,7 @@ export const Root: React.FC = () => (
     <Composition id="Opcion" component={Opcion} durationInFrames={1} fps={30} width={1080} height={1920} defaultProps={{ opcion: "A" as const }} />
     {/* Estilos más refinados para el clip de la app */}
     <Composition id="Refinado" component={Refinado} durationInFrames={1} fps={30} width={1080} height={1920} defaultProps={{ estilo: "A" as const }} />
+    {/* Estilos de subtítulos normales */}
+    <Composition id="Subtitulo" component={Subtitulo} durationInFrames={1} fps={30} width={1080} height={1920} defaultProps={{ estilo: "1" as const }} />
   </>
 );
