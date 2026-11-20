@@ -8,3 +8,5 @@ output/muestras/
 out/
 output/opciones/*.png
 output/opciones/*.jpg
+output/refinados/*.png
+output/refinados/*.jpg
