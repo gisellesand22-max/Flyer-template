@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { C, POPPINS, PIXEL, FPS, usePop } from "./brand";
 import { Base, Person } from "./Layers";
 
@@ -102,7 +102,6 @@ const Serie: React.FC = () => {
 const BEHIND: G[] = [
   { t0: 1.04, t1: SERIE_END, y: 362, align: "center", lines: [{ text: "UPDATE", size: 232, weight: 900 }] },
   { t0: 4.36, t1: 5.5, y: 345, align: "center", lines: [{ text: "OpenAI", size: 230, weight: 900 }] },
-  { t0: 16.72, t1: 17.95, y: 390, align: "center", lines: [{ text: "ChatGPT", size: 200, weight: 900 }] },
 ];
 
 const FRONT: G[] = [
@@ -116,30 +115,92 @@ const FRONT: G[] = [
   { t0: 8.74, t1: 10.7, y: 272, align: "center", lines: [{ text: "como un perfil de", size: 56, weight: 600 }, { text: "Google Maps", size: 130, delay: 0.7 }] },
   { t0: 10.66, t1: 11.75, y: 300, lines: [{ text: "Reclamas", size: 150 }, { text: "tu negocio", size: 64, weight: 600, delay: 0.3 }] },
   { t0: 11.72, t1: 12.5, y: 300, x: 1000, align: "right", lines: [{ text: "verificas", size: 180 }] },
-  { t0: 12.48, t1: 13.75, y: 300, lines: [{ text: "actualizas", size: 150 }, { text: "tus datos", size: 64, weight: 600, delay: 0.64 }] },
-  { t0: 13.74, t1: 15.3, y: 300, x: 1000, align: "right", lines: [{ text: "productos", size: 140 }, { text: "con precio", size: 64, weight: 600, delay: 1.0 }] },
-  { t0: 16.22, t1: 16.75, y: 300, lines: [{ text: "cuántas veces", size: 80, weight: 600 }] },
-  { t0: 17.72, t1: 18.55, y: 300, x: 1000, align: "right", lines: [{ text: "te menciona", size: 90 }] },
-  { t0: 18.66, t1: 19.9, y: 280, align: "center", lines: [{ text: "cuántos", size: 64, weight: 600 }, { text: "clics", size: 220, weight: 900, delay: 0.3 }] },
+  { t0: 15.36, t1: 16.2, y: 300, lines: [{ text: "Además", size: 110 }] },
   { t0: 20.24, t1: 20.9, y: 300, lines: [{ text: "busca tu negocio", size: 84 }] },
   { t0: 20.88, t1: 21.9, y: 300, align: "center", lines: [{ text: "ChatGPT", size: 190 }] },
   { t0: 21.84, t1: 22.9, y: 300, lines: [{ text: "checa", size: 64, weight: 600 }, { text: "qué dice de ti", size: 100, delay: 0.3 }] },
   { t0: 22.9, t1: 23.57, y: 280, align: "center", lines: [{ text: "¿Lo habías", size: 110, weight: 600 }, { text: "hecho?", size: 200, delay: 0.2 }] },
 ];
 
+// ───────── Logos ─────────
+const LogoPop: React.FC<{ t0: number; t1: number; src: string; left: number; top: number; h: number }> = ({ t0, t1, src, left, top, h }) => {
+  const t = useCurrentFrame() / FPS;
+  const p = usePop(t0, 12);
+  if (t < t0 || t > t1) return null;
+  const out = interpolate(t, [t1 - 0.18, t1], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return (
+    <Img
+      src={staticFile(src)}
+      style={{
+        position: "absolute", left, top, height: h,
+        opacity: Math.min(1, p * 2) * (1 - out),
+        transform: `scale(${interpolate(p, [0, 1], [0.4, 1]) * (1 + 0.12 * out)}) rotate(${interpolate(p, [0, 1], [-20, 0])}deg)`,
+      }}
+    />
+  );
+};
+
+// ───────── Split screen con capturas del proceso ─────────
+// Arriba la captura sobre panel aqua, abajo tu video.
+const SPLIT_H = 960;
+const SPLITS = [
+  { t0: 12.48, t1: 15.12, img: "captura_onboarding.png", w: 920, left: 80, top: 266, kind: "A" },
+  { t0: 16.22, t1: 19.76, img: "captura_resumen.png", w: 760, left: 160, top: 170, kind: "B" },
+];
+const splitAmt = (t: number) =>
+  Math.max(0, ...SPLITS.map((sp) =>
+    interpolate(t, [sp.t0, sp.t0 + 0.3, sp.t1 - 0.3, sp.t1], [0, 1, 1, 0], {
+      extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic),
+    })));
+
+const Capturas: React.FC<{ t: number; s: number }> = ({ t, s }) => {
+  const sp = SPLITS.find((x) => t >= x.t0 - 0.05 && t <= x.t1 + 0.05);
+  const ease = Easing.inOut(Easing.cubic);
+  const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
+  let scale = 1, ox = 50, oy = 50;
+  if (sp?.kind === "A") {
+    scale = interpolate(t, [sp.t0, sp.t1], [1, 1.12], clamp); ox = 30;
+  } else if (sp?.kind === "B") {
+    // zoom a "Menciones", luego a "Clics", y se aleja al final
+    const zin = interpolate(t, [16.3, 16.8], [0, 1], { ...clamp, easing: ease });
+    const zout = interpolate(t, [19.4, 19.76], [0, 1], { ...clamp, easing: ease });
+    scale = 1 + 0.35 * zin * (1 - zout);
+    ox = interpolate(t, [18.6, 18.95], [10, 85], { ...clamp, easing: ease });
+    oy = 15;
+  }
+  return (
+    <div style={{ position: "absolute", left: 0, top: 0, width: 1080, height: SPLIT_H, background: C.aqua, transform: `translateY(${-(1 - s) * SPLIT_H}px)`, overflow: "hidden" }}>
+      {sp && (
+        <div style={{ position: "absolute", left: sp.left, top: sp.top, width: sp.w, borderRadius: 36, overflow: "hidden", transform: `scale(${interpolate(s, [0, 1], [0.92, 1])})` }}>
+          <Img src={staticFile(sp.img)} style={{ width: "100%", display: "block", transform: `scale(${scale})`, transformOrigin: `${ox}% ${oy}%` }} />
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const Negocio: React.FC = () => {
   const t = useCurrentFrame() / FPS;
   const z = zoomAt(t);
+  const s = splitAmt(t);
   return (
     <AbsoluteFill style={{ background: C.white }}>
-      {/* Video, texto detrás de ti y tu figura: comparten el zoom */}
-      <AbsoluteFill style={{ transform: `scale(${z})`, transformOrigin: "45% 38%" }}>
-        <Base />
-        {BEHIND.map((g, i) => <Group key={i} {...g} color={C.aqua} />)}
-        <Person />
+      {/* Video, texto detrás de ti y tu figura: comparten el zoom. En split screen baja a la mitad inferior */}
+      <AbsoluteFill style={{ transform: `translateY(${500 * s}px)`, clipPath: `inset(${(SPLIT_H - 500) * s}px 0 0 0)` }}>
+        <AbsoluteFill style={{ transform: `scale(${z})`, transformOrigin: "45% 38%" }}>
+          <Base />
+          {BEHIND.map((g, i) => <Group key={i} {...g} color={C.aqua} />)}
+          <Person />
+        </AbsoluteFill>
       </AbsoluteFill>
+      <Capturas t={t} s={s} />
       {FRONT.map((g, i) => <Group key={i} {...g} />)}
       <Serie />
+      {/* Logos, sincronizados con la palabra que dices */}
+      <LogoPop t0={3.24} t1={4.9} src="logos/chatgpt_blanco.png" left={262} top={1288} h={112} />
+      <LogoPop t0={7.0} t1={7.95} src="logos/chatgpt_negro.png" left={800} top={276} h={96} />
+      <LogoPop t0={9.84} t1={10.7} src="logos/google_maps.svg" left={836} top={250} h={104} />
+      <LogoPop t0={20.88} t1={21.9} src="logos/chatgpt_negro.png" left={884} top={196} h={96} />
     </AbsoluteFill>
   );
 };
