@@ -1,14 +1,15 @@
 import React from "react";
 import { AbsoluteFill, Img, OffthreadVideo, staticFile, useCurrentFrame } from "remotion";
-import { APOYO, C, ramp, T, TITULAR, useBrandFonts, usePop } from "./brand";
+import { APOYO, C, ramp, TITULAR, useBrandFonts } from "./brand";
 
-// Video de 25 s a 30 fps
-export const TOTAL = 750;
+// Dirección "Lima total con capas": fondo lima, palabras gigantes detrás del celular,
+// texto chico arriba y etiquetas blancas al frente. Movimiento suave, sin rebotes.
+export const TOTAL = 750; // 25 s a 30 fps
 const CLIP_END = 346; // public/canje.mp4 dura 348 cuadros
 const TAP = 226; // cuadro en que se toca "Activar beneficio"
 const CTA_FROM = 624;
 
-// ---------- Utilidades de movimiento ----------
+// ---------- Movimiento suave ----------
 const smooth = (x: number) => x * x * (3 - 2 * x);
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
 
@@ -26,114 +27,41 @@ const keys = (frame: number, ks: [number, number[]][]): number[] => {
   return ks[ks.length - 1][1];
 };
 
-// Fondo: blanco y lima. 1 = lima, 0 = blanco. Cambia con un fundido entre escenas.
-const limaBg = (frame: number) => 1 - ramp(frame, 80, 92) + ramp(frame, 202, 214) - ramp(frame, 336, 348);
-// Color de contraste para aros y marcas: blanco sobre lima, lima sobre blanco
-const accent = (frame: number) => (limaBg(frame) > 0.5 ? C.blanco : C.lima);
-
-// ---------- Texto dinámico ----------
-type Dir = "left" | "right" | "up" | "down";
-const OFFSET: Record<Dir, [number, number]> = { left: [-110, 0], right: [110, 0], up: [0, -70], down: [0, 70] };
-
-// Una línea de texto que entra deslizando y sale con un fundido corto. Sin rebote.
-const Txt: React.FC<{
-  frame: number;
-  from: number;
-  to: number;
-  y: number;
-  x?: number;
-  align?: "left" | "right" | "center";
-  size: number;
-  big?: boolean;
-  dir?: Dir;
-  children: React.ReactNode;
-}> = ({ frame, from, to, y, x = 80, align = "left", size, big, dir = "left", children }) => {
+// Aparece con un fundido y una subida corta; sale con un fundido. Sin rebote.
+const Fade: React.FC<{ frame: number; from: number; to: number; dy?: number; dur?: number; style: React.CSSProperties; children: React.ReactNode }> = ({ frame, from, to, dy = 24, dur = 16, style, children }) => {
   if (frame < from || frame >= to) return null;
-  const inn = easeOut(ramp(frame, from, from + 12));
-  const out = ramp(frame, to - 7, to);
-  const [dx, dy] = OFFSET[dir];
-  const pos: React.CSSProperties =
-    align === "left" ? { left: x } : align === "right" ? { right: 1080 - x } : { left: 0, width: 1080, textAlign: "center" };
-  const mark: React.CSSProperties = big ? { background: accent(frame), borderRadius: 26, padding: "0 20px 8px", display: "inline-block" } : {};
-  const inner = big ? <span style={mark}>{children}</span> : children;
+  const inn = easeOut(ramp(frame, from, from + dur));
+  const out = ramp(frame, to - 9, to);
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: y,
-        ...pos,
-        whiteSpace: "nowrap",
-        fontFamily: big ? TITULAR : APOYO,
-        fontWeight: big ? 800 : 600,
-        fontSize: size,
-        lineHeight: 1.05,
-        letterSpacing: big ? "-0.02em" : 0,
-        color: C.carbon,
-        opacity: inn * (1 - out),
-        transform: `translate(${dx * (1 - inn) - dx * 0.25 * out}px, ${dy * (1 - inn) - dy * 0.25 * out}px)`,
-      }}
-    >
-      {inner}
-    </div>
+    <div style={{ ...style, opacity: inn * (1 - out), transform: `${style.transform ?? ""} translateY(${(1 - inn) * dy}px)` }}>{children}</div>
   );
 };
 
-// ---------- Fondo ----------
-const Rings: React.FC<{ frame: number }> = ({ frame }) => {
-  const f = (p: number) => Math.sin(frame / 40 + p) * 14;
-  const rings: [number, number, number, number][] = [
-    [1000, 360, 230, 0],
-    [40, 1330, 300, 1.8],
-    [900, 1700, 120, 3.2],
-  ];
-  return (
-    <>
-      {rings.map(([x, y, r, p], i) => (
-        <div key={i} style={{ position: "absolute", left: x - r, top: y - r + f(p), width: r * 2, height: r * 2, borderRadius: r, border: `6px solid ${accent(frame)}`, opacity: 0.5 }} />
-      ))}
-    </>
-  );
-};
+// ---------- Texto en capas ----------
+// Palabra gigante, detrás del celular
+const Giant: React.FC<{ frame: number; from: number; to: number; size: number; color?: string; rotate?: number; top?: number; children: React.ReactNode }> = ({ frame, from, to, size, color = C.blanco, rotate = 0, top = 335, children }) => (
+  <Fade frame={frame} from={from} to={to} dy={36} dur={20} style={{ position: "absolute", top, left: 0, width: 1080, textAlign: "center", fontFamily: TITULAR, fontWeight: 800, fontSize: size, lineHeight: 0.9, letterSpacing: "-0.04em", color, whiteSpace: "nowrap", transform: `rotate(${rotate}deg)` }}>
+    {children}
+  </Fade>
+);
 
-// ---------- Indicador de pasos ----------
-const STEPS: [string, string, number, number][] = [
-  ["1", "Perfil", 90, 214],
-  ["2", "Descuento", 214, 345],
-  ["3", "Panel", 345, CTA_FROM],
-];
-const Steps: React.FC<{ frame: number }> = ({ frame }) => {
-  if (frame < 88 || frame >= CTA_FROM + 4) return null;
-  const inn = easeOut(ramp(frame, 88, 100));
-  const out = ramp(frame, CTA_FROM - 6, CTA_FROM + 4);
-  return (
-    <div style={{ position: "absolute", top: 258, left: 0, width: 1080, display: "flex", justifyContent: "center", gap: 14, opacity: inn * (1 - out), transform: `translateY(${(1 - inn) * -30}px)` }}>
-      {STEPS.map(([n, label, a, b]) => {
-        const on = frame >= a && frame < b;
-        return (
-          <div
-            key={n}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "8px 24px",
-              borderRadius: 40,
-              background: on ? C.carbon : "transparent",
-              border: `3px solid ${on ? C.carbon : "rgba(43,43,35,0.35)"}`,
-              fontFamily: TITULAR,
-              fontWeight: 800,
-              fontSize: 30,
-              color: on ? C.lima : "rgba(43,43,35,0.6)",
-            }}
-          >
-            {n}
-            <span style={{ fontFamily: APOYO, fontWeight: 600 }}>{label}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+// Texto chico de apoyo, arriba a la izquierda
+const Small: React.FC<{ frame: number; from: number; to: number; top?: number; left?: number; right?: number; size?: number; children: React.ReactNode }> = ({ frame, from, to, top = 262, left, right, size = 52, children }) => (
+  <Fade frame={frame} from={from} to={to} dy={16} style={{ position: "absolute", top, left: left ?? (right === undefined ? 80 : undefined), right, fontFamily: APOYO, fontWeight: 600, fontSize: size, lineHeight: 1.1, color: C.carbon, whiteSpace: "nowrap" }}>
+    {children}
+  </Fade>
+);
+
+// El punto del logo
+const Dot: React.FC<{ size: number }> = ({ size }) => <span style={{ display: "inline-block", width: size, height: size, borderRadius: size, background: C.lima, marginLeft: 8 }} />;
+
+// Etiqueta blanca al frente, con el punto lima del logo al final
+const Tag: React.FC<{ frame: number; from: number; to: number; top: number; left?: number; right?: number; size: number; rotate?: number; children: React.ReactNode }> = ({ frame, from, to, top, left, right, size, rotate = -3, children }) => (
+  <Fade frame={frame} from={from} to={to} dy={28} dur={18} style={{ position: "absolute", top, left, right, display: "flex", alignItems: "baseline", background: C.blanco, borderRadius: 30, padding: "0 28px 12px 26px", fontFamily: TITULAR, fontWeight: 800, fontSize: size, lineHeight: 1.15, letterSpacing: "-0.02em", color: C.carbon, whiteSpace: "nowrap", boxShadow: "0 18px 40px rgba(43,43,35,0.25)", transform: `rotate(${rotate}deg)` }}>
+    {children}
+    <Dot size={Math.round(size * 0.24)} />
+  </Fade>
+);
 
 // ---------- Celular ----------
 const BEZEL = 20;
@@ -159,10 +87,10 @@ const Phone: React.FC<{
         height: PH,
         background: C.carbon,
         borderRadius: 70,
-        boxShadow: `0 0 0 6px ${accent(frame)}, 0 40px 80px rgba(43,43,35,0.3)`,
+        boxShadow: `0 0 0 6px ${C.blanco}, 0 40px 80px rgba(43,43,35,0.35)`,
         transformOrigin: "50% 0%",
         transformStyle: "preserve-3d",
-        transform: `perspective(1800px) scale(${sc}) rotateY(${rotY + Math.sin(frame / 25) * 1.4}deg) rotateZ(${rotZ}deg) rotateX(${rotX}deg)`,
+        transform: `perspective(1800px) scale(${sc}) rotateY(${rotY + Math.sin(frame / 40) * 1}deg) rotateZ(${rotZ}deg) rotateX(${rotX}deg)`,
       }}
     >
       <div style={{ position: "absolute", left: BEZEL, top: BEZEL, width: screenW, height: SCREEN_H, borderRadius: 52, overflow: "hidden", background: C.arena }}>{screen}</div>
@@ -176,36 +104,34 @@ const Phone: React.FC<{
 const CLIP_W = 562;
 const CLIP_K = CLIP_W / 1080;
 const CLIP_KEYS: [number, number[]][] = [
-  [0, [540, 1350, 0.72, 24, 0, 8]],
-  [26, [560, 780, 0.72, -12, 0, 4]],
-  [70, [560, 780, 0.72, -12, 0, 4]],
-  [96, [830, 470, 0.9, -16, 2, 3]],
-  [190, [820, 470, 0.9, -8, 0, 3]],
-  [214, [540, 620, 0.88, -6, 0, 3]],
-  [310, [540, 620, 0.88, 0, 0, 2]],
-  [345, [-420, 620, 0.88, 22, -2, 3]],
+  [0, [540, 1500, 0.9, 10, 0, 6]],
+  [32, [540, 520, 0.9, -8, 0, 3]],
+  [200, [540, 520, 0.9, -8, 0, 3]],
+  [226, [600, 580, 0.88, -8, 0, 3]],
+  [318, [600, 580, 0.88, -6, 0, 2]],
+  [352, [-300, 580, 0.88, 14, 0, 3]],
 ];
 
-// Círculo lima donde se toca la pantalla
+// Toque en la pantalla: un punto lima con borde carbón y un aro que se abre
 const Tap: React.FC<{ frame: number; at: number; x: number; y: number }> = ({ frame, at, x, y }) => {
   if (frame < at - 8 || frame > at + 16) return null;
   const k = ramp(frame, at, at + 16);
   const pre = easeOut(ramp(frame, at - 8, at));
-  const r = 20 + 48 * k;
+  const r = 20 + 44 * k;
   return (
     <>
-      <div style={{ position: "absolute", left: x - 20, top: y - 20, width: 40, height: 40, borderRadius: 20, background: C.lima, border: `4px solid ${C.carbon}`, boxSizing: "border-box", opacity: frame < at ? pre : 1 - k, transform: `scale(${frame < at ? 1.6 - 0.6 * pre : 1})` }} />
-      {frame >= at && <div style={{ position: "absolute", left: x - r, top: y - r, width: r * 2, height: r * 2, borderRadius: r, border: `5px solid ${C.lima}`, opacity: 1 - k }} />}
+      <div style={{ position: "absolute", left: x - 20, top: y - 20, width: 40, height: 40, borderRadius: 20, background: C.lima, border: `4px solid ${C.carbon}`, boxSizing: "border-box", opacity: frame < at ? pre : 1 - k }} />
+      {frame >= at && <div style={{ position: "absolute", left: x - r, top: y - r, width: r * 2, height: r * 2, borderRadius: r, border: `5px solid ${C.carbon}`, opacity: 0.7 * (1 - k) }} />}
     </>
   );
 };
 
-// "Muestra al negocio" sale del celular hacia ti
+// "Muestra al negocio" sale del celular hacia ti, suave
 const RedeemCallout: React.FC<{ frame: number }> = ({ frame }) => {
   const at = TAP + 22;
-  const p = usePop(at, 15);
-  if (frame < at || frame >= 312) return null;
-  const out = 1 - ramp(frame, 300, 312);
+  if (frame < at || frame >= 318) return null;
+  const p = easeOut(ramp(frame, at, at + 22));
+  const out = 1 - ramp(frame, 306, 318);
   const [x, y, w, h] = [50, 830, 980, 395];
   const f = CLIP_K * 1.4;
   const cw = w * f;
@@ -213,20 +139,7 @@ const RedeemCallout: React.FC<{ frame: number }> = ({ frame }) => {
   const cx = BEZEL + (x + w / 2) * CLIP_K;
   const cy = BEZEL + (y + h / 2) * CLIP_K;
   return (
-    <div
-      style={{
-        position: "absolute",
-        left: cx - cw / 2,
-        top: cy - ch / 2,
-        width: cw,
-        height: ch,
-        borderRadius: 30,
-        overflow: "hidden",
-        boxShadow: `0 0 0 ${7 * p}px ${accent(frame)}, 0 30px 60px rgba(43,43,35,0.4)`,
-        opacity: out,
-        transform: `translateZ(${190 * p}px) scale(${0.7 + 0.3 * p})`,
-      }}
-    >
+    <div style={{ position: "absolute", left: cx - cw / 2, top: cy - ch / 2, width: cw, height: ch, borderRadius: 30, overflow: "hidden", boxShadow: `0 0 0 7px ${C.blanco}, 0 30px 60px rgba(43,43,35,0.35)`, opacity: out * Math.min(p * 2, 1), transform: `translateZ(${190 * p}px)` }}>
       <OffthreadVideo src={staticFile("canje.mp4")} muted style={{ position: "absolute", left: -x * f, top: -y * f, width: 1080 * f, height: 1920 * f, maxWidth: "none" }} />
     </div>
   );
@@ -254,60 +167,43 @@ const ClipPhone: React.FC<{ frame: number }> = ({ frame }) => {
 const DASH_W = 460;
 const DASH_K = DASH_W / 920; // las capturas miden 920 x 2000
 const DASH_KEYS: [number, number[]][] = [
-  [320, [1500, 600, 0.88, 24, 0, 3]],
-  [352, [560, 600, 0.88, 10, 0, 3]],
-  [420, [500, 600, 0.88, -10, 0, 3]],
-  [470, [580, 600, 0.88, 8, 0, 3]],
-  [525, [540, 600, 0.9, -6, 0, 3]],
-  [600, [540, 600, 0.9, 0, 0, 3]],
-  [CTA_FROM + 6, [540, 1500, 0.9, 0, 0, 3]],
+  [322, [1450, 485, 0.9, 16, 0, 3]],
+  [356, [540, 485, 0.9, 8, 0, 3]],
+  [520, [540, 485, 0.9, 8, 0, 3]],
+  [560, [540, 485, 0.9, 6, 0, 3]],
+  [610, [540, 485, 0.9, 6, 0, 3]],
+  [CTA_FROM + 6, [540, 1500, 0.9, 6, 0, 3]],
 ];
 const SHOTS = ["m_publico.png", "m_edad.png", "m_resumen.png"];
 const SHOT_SWITCH = [465, 510]; // cuadros en que cambia la captura
 
-// Aro lima que se dibuja sobre una captura (coordenadas de la captura de 920 x 2000)
+// Aro carbón que se dibuja sobre una captura (coordenadas de la captura de 920 x 2000)
 const Ring: React.FC<{ frame: number; at: number; x: number; y: number; w: number; h: number; r?: number }> = ({ frame, at, x, y, w, h, r = 28 }) => {
-  const p = usePop(at, 12);
   if (frame < at) return null;
-  return (
-    <div style={{ position: "absolute", left: x * DASH_K - 4, top: y * DASH_K - 4, width: w * DASH_K + 8, height: h * DASH_K + 8, borderRadius: r, border: `5px solid ${C.lima}`, boxShadow: `0 0 0 5px rgba(205,217,23,0.25)`, transform: `scale(${0.8 + 0.2 * p})`, opacity: Math.min(p * 2, 1) }} />
-  );
+  const p = easeOut(ramp(frame, at, at + 14));
+  return <div style={{ position: "absolute", left: x * DASH_K - 4, top: y * DASH_K - 4, width: w * DASH_K + 8, height: h * DASH_K + 8, borderRadius: r, border: `5px solid ${C.carbon}`, opacity: p }} />;
 };
 
 // Recorte de una captura que sale del celular hacia ti
-const Pop: React.FC<{ frame: number; at: number; until: number; shot: string; region: [number, number, number, number]; zoom?: number }> = ({ frame, at, until, shot, region, zoom = 0.92 }) => {
-  const p = usePop(at, 15);
+const Pop: React.FC<{ frame: number; at: number; until: number; region: [number, number, number, number]; zoom?: number }> = ({ frame, at, until, region, zoom = 0.92 }) => {
   if (frame < at || frame >= until) return null;
-  const out = 1 - ramp(frame, until - 8, until);
+  const p = easeOut(ramp(frame, at, at + 20));
+  const out = 1 - ramp(frame, until - 9, until);
   const [x, y, w, h] = region;
   const cw = w * zoom;
   const ch = h * zoom;
   const cx = BEZEL + (x + w / 2) * DASH_K;
   const cy = BEZEL + (y + h / 2) * DASH_K;
   return (
-    <div
-      style={{
-        position: "absolute",
-        left: cx - cw / 2,
-        top: cy - ch / 2,
-        width: cw,
-        height: ch,
-        borderRadius: 30,
-        overflow: "hidden",
-        boxShadow: `0 0 0 ${7 * p}px ${accent(frame)}, 0 30px 60px rgba(43,43,35,0.4)`,
-        background: C.blanco,
-        opacity: out,
-        transform: `translateZ(${150 * p}px) scale(${0.7 + 0.3 * p})`,
-      }}
-    >
-      <Img src={staticFile(shot)} style={{ position: "absolute", left: -x * zoom, top: -y * zoom, width: 920 * zoom, height: 2000 * zoom, maxWidth: "none" }} />
+    <div style={{ position: "absolute", left: cx - cw / 2, top: cy - ch / 2, width: cw, height: ch, borderRadius: 30, overflow: "hidden", background: C.blanco, boxShadow: `0 0 0 7px ${C.blanco}, 0 30px 60px rgba(43,43,35,0.35)`, opacity: out * Math.min(p * 2, 1), transform: `translateZ(${150 * p}px)` }}>
+      <Img src={staticFile("m_resumen.png")} style={{ position: "absolute", left: -x * zoom, top: -y * zoom, width: 920 * zoom, height: 2000 * zoom, maxWidth: "none" }} />
     </div>
   );
 };
 
 const DashPhone: React.FC<{ frame: number }> = ({ frame }) => {
-  if (frame < 318 || frame >= CTA_FROM + 8) return null;
-  const idx = smooth(ramp(frame, SHOT_SWITCH[0], SHOT_SWITCH[0] + 12)) + smooth(ramp(frame, SHOT_SWITCH[1], SHOT_SWITCH[1] + 12));
+  if (frame < 320 || frame >= CTA_FROM + 8) return null;
+  const idx = smooth(ramp(frame, SHOT_SWITCH[0], SHOT_SWITCH[0] + 14)) + smooth(ramp(frame, SHOT_SWITCH[1], SHOT_SWITCH[1] + 14));
   return (
     <Phone
       frame={frame}
@@ -318,7 +214,7 @@ const DashPhone: React.FC<{ frame: number }> = ({ frame }) => {
           {SHOTS.map((src, i) => (
             <div key={src} style={{ position: "absolute", left: (i - idx) * DASH_W, top: 0, width: DASH_W, height: SCREEN_H }}>
               <Img src={staticFile(src)} style={{ width: DASH_W, height: SCREEN_H }} />
-              {i === 1 && <Ring frame={frame} at={482} x={405} y={1236} w={112} h={340} r={26} />}
+              {i === 1 && <Ring frame={frame} at={484} x={405} y={1236} w={112} h={340} r={26} />}
             </div>
           ))}
         </>
@@ -326,53 +222,44 @@ const DashPhone: React.FC<{ frame: number }> = ({ frame }) => {
       over={
         <>
           {/* Vistas a tu negocio */}
-          <Pop frame={frame} at={524} until={566} shot="m_resumen.png" region={[46, 383, 828, 255]} />
+          <Pop frame={frame} at={524} until={566} region={[46, 383, 828, 255]} />
           {/* Actividad reciente: Giselle, canjeada */}
-          <Pop frame={frame} at={570} until={CTA_FROM + 4} shot="m_resumen.png" region={[46, 1262, 828, 345]} />
+          <Pop frame={frame} at={570} until={CTA_FROM + 4} region={[46, 1262, 828, 345]} />
         </>
       }
     />
   );
 };
 
-// ---------- Cierre ----------
+// ---------- Cierre (fondo blanco, el punto lima se ve) ----------
 const Close: React.FC<{ frame: number }> = ({ frame }) => {
-  const from = CTA_FROM - T;
-  const bg = ramp(frame, from, from + T);
-  const logo = usePop(from + 3, 12);
-  const line = usePop(from + 12, 14);
-  const btn = usePop(from + 24, 10);
-  const info = usePop(from + 32, 14);
+  const from = CTA_FROM - 12;
+  const bg = ramp(frame, from, from + 14);
   if (frame < from) return null;
-  const f = (p: number) => Math.sin(frame / 30 + p) * 10;
-  const dots: [number, number, number, number][] = [
-    [1040, 150, 120, 0],
-    [-40, 1760, 170, 1.5],
-    [985, 1660, 46, 3],
-    [60, 140, 34, 4.2],
-  ];
+  const rise = (at: number) => easeOut(ramp(frame, at, at + 18));
+  const logo = rise(from + 6);
+  const line = rise(from + 16);
+  const btn = rise(from + 28);
+  const info = rise(from + 38);
   return (
     <div style={{ position: "absolute", inset: 0, background: C.blanco, opacity: bg }}>
-      {dots.map(([x, y, r, p], i) => (
-        <div key={i} style={{ position: "absolute", left: x - r, top: y - r + f(p), width: r * 2, height: r * 2, borderRadius: r, background: C.lima }} />
-      ))}
-      <div style={{ position: "absolute", top: 420, left: 0, width: 1080, display: "flex", justifyContent: "center" }}>
-        <Img src={staticFile("logo_enplan.svg")} style={{ width: 560, transform: `scale(${0.7 + 0.3 * logo})`, opacity: Math.min(logo * 1.5, 1) }} />
+      <div style={{ position: "absolute", top: 440, left: 0, width: 1080, display: "flex", justifyContent: "center", opacity: logo, transform: `translateY(${(1 - logo) * 24}px)` }}>
+        <Img src={staticFile("logo_enplan.svg")} style={{ width: 560 }} />
       </div>
-      <div style={{ position: "absolute", top: 690, left: 0, width: 1080, textAlign: "center", fontFamily: APOYO, fontWeight: 600, fontSize: 52, lineHeight: 1.25, color: C.carbon, opacity: line, transform: `translateY(${(1 - line) * 40}px)` }}>
+      <div style={{ position: "absolute", top: 700, left: 0, width: 1080, textAlign: "center", fontFamily: APOYO, fontWeight: 600, fontSize: 52, lineHeight: 1.25, color: C.carbon, opacity: line, transform: `translateY(${(1 - line) * 24}px)` }}>
         Aparece ante quienes buscan
         <br />
         <span style={{ fontFamily: TITULAR, fontWeight: 800, fontSize: 76, background: `linear-gradient(transparent 62%, ${C.lima} 62%, ${C.lima} 92%, transparent 92%)`, padding: "0 10px" }}>su siguiente plan</span>
       </div>
-      <div style={{ position: "absolute", top: 1010, left: 0, width: 1080, display: "flex", justifyContent: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 18, background: C.lima, color: C.carbon, borderRadius: 80, padding: "28px 54px", fontFamily: TITULAR, fontWeight: 800, fontSize: 54, transform: `scale(${btn * (1 + 0.025 * Math.sin((frame - from) / 5))})` }}>
+      <div style={{ position: "absolute", top: 1020, left: 0, width: 1080, display: "flex", justifyContent: "center", opacity: btn, transform: `translateY(${(1 - btn) * 24}px)` }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18, background: C.lima, color: C.carbon, borderRadius: 80, padding: "28px 54px", fontFamily: TITULAR, fontWeight: 800, fontSize: 54 }}>
           Registra tu negocio
           <svg width={50} height={40} viewBox="0 0 52 40">
             <path d="M4 20 H44 M28 4 L46 20 L28 36" fill="none" stroke={C.carbon} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </div>
-      <div style={{ position: "absolute", top: 1190, left: 0, width: 1080, textAlign: "center", fontFamily: APOYO, fontWeight: 600, fontSize: 50, lineHeight: 1.4, color: C.carbon, opacity: info, transform: `translateY(${(1 - info) * 30}px)` }}>
+      <div style={{ position: "absolute", top: 1200, left: 0, width: 1080, textAlign: "center", fontFamily: APOYO, fontWeight: 600, fontSize: 50, lineHeight: 1.4, color: C.carbon, opacity: info, transform: `translateY(${(1 - info) * 24}px)` }}>
         enplan.app
         <br />
         @enplan.ags
@@ -385,42 +272,48 @@ const Close: React.FC<{ frame: number }> = ({ frame }) => {
 export const EnplanCanje: React.FC = () => {
   useBrandFonts();
   const frame = useCurrentFrame();
+  const step = (n: number, from: number, to: number) => (
+    <Small frame={frame} from={from} to={to} top={270} right={80} size={32}>
+      <span style={{ opacity: 0.7 }}>Paso {n} de 3</span>
+    </Small>
+  );
   return (
-    <AbsoluteFill style={{ background: C.blanco }}>
-      <AbsoluteFill style={{ background: C.lima, opacity: limaBg(frame) }} />
-      <Rings frame={frame} />
-      <Steps frame={frame} />
+    <AbsoluteFill style={{ background: C.lima }}>
+      {/* Capa 1: palabras gigantes, detrás del celular */}
+      <Giant frame={frame} from={10} to={76} size={180}>NEGOCIO</Giant>
+      <Giant frame={frame} from={100} to={206} size={320}>LOGO</Giant>
+      <Giant frame={frame} from={222} to={298} size={310} color={C.carbon} rotate={-5}>ELIGE</Giant>
+      <Giant frame={frame} from={306} to={340} size={200} color={C.carbon} rotate={-5}>CANJEAN</Giant>
+      <Giant frame={frame} from={356} to={418} size={168}>MÉTRICAS</Giant>
+      <Giant frame={frame} from={428} to={508} size={190} color={C.carbon}>PÚBLICO</Giant>
+      <Giant frame={frame} from={518} to={563} size={200}>PERFIL</Giant>
+      <Giant frame={frame} from={572} to={CTA_FROM - 6} size={168}>CANJEADO</Giant>
 
+      {/* Capa 2: celulares */}
       <DashPhone frame={frame} />
       <ClipPhone frame={frame} />
 
-      {/* 1. Gancho */}
-      <Txt frame={frame} from={4} to={74} y={270} size={64} dir="left">Así se vería</Txt>
-      <Txt frame={frame} from={10} to={74} y={340} size={128} big dir="left">tu negocio</Txt>
-      <Txt frame={frame} from={18} to={74} y={492} size={64} dir="left">en enplan</Txt>
+      {/* Capa 3: texto chico y etiquetas al frente */}
+      <Small frame={frame} from={6} to={76}>Así se vería tu</Small>
+      <Tag frame={frame} from={24} to={76} top={1318} left={60} size={120}>en enplan</Tag>
 
-      {/* 2. Perfil: logo y fotos */}
-      <Txt frame={frame} from={96} to={200} y={520} size={56} dir="left">Llena tu perfil</Txt>
-      <Txt frame={frame} from={106} to={200} y={600} size={48} dir="left">con tu</Txt>
-      <Txt frame={frame} from={108} to={200} y={650} size={150} big dir="left">logo</Txt>
-      <Txt frame={frame} from={142} to={200} y={850} size={48} dir="left">y tus</Txt>
-      <Txt frame={frame} from={144} to={200} y={900} size={116} big dir="left">fotos</Txt>
+      {step(1, 92, 212)}
+      <Small frame={frame} from={96} to={206}>Llena tu perfil con tu</Small>
+      <Small frame={frame} from={148} to={206} top={1262} left={80} size={48}>y tus</Small>
+      <Tag frame={frame} from={152} to={206} top={1318} left={60} size={128}>fotos</Tag>
 
-      {/* 3. Descuento */}
-      <Txt frame={frame} from={216} to={298} y={348} size={60} dir="down">Elige tu</Txt>
-      <Txt frame={frame} from={220} to={298} y={416} size={140} big dir="down">descuento</Txt>
-      <Txt frame={frame} from={304} to={336} y={348} x={1000} align="right" size={56} dir="right">y tus clientes</Txt>
-      <Txt frame={frame} from={308} to={336} y={412} x={1000} align="right" size={124} big dir="right">lo canjean</Txt>
+      {step(2, 216, 340)}
+      <Small frame={frame} from={234} to={298} top={1330} left={80} size={48}>tu</Small>
+      <Tag frame={frame} from={238} to={298} top={1384} left={60} size={116}>descuento</Tag>
+      <Small frame={frame} from={308} to={338}>y tus clientes lo</Small>
 
-      {/* 4. Panel de métricas */}
-      <Txt frame={frame} from={352} to={418} y={348} size={56} dir="left">Y tienes un panel</Txt>
-      <Txt frame={frame} from={356} to={418} y={410} size={120} big dir="left">de métricas</Txt>
-      <Txt frame={frame} from={424} to={508} y={348} x={1000} align="right" size={56} dir="right">para conocer a fondo</Txt>
-      <Txt frame={frame} from={428} to={508} y={410} x={1000} align="right" size={136} big dir="right">tu público</Txt>
-      <Txt frame={frame} from={514} to={563} y={348} align="center" size={60} dir="up">Quién ve</Txt>
-      <Txt frame={frame} from={518} to={563} y={416} align="center" size={150} big dir="up">tu perfil</Txt>
-      <Txt frame={frame} from={568} to={CTA_FROM - 2} y={348} size={60} dir="left">y quién ha</Txt>
-      <Txt frame={frame} from={572} to={CTA_FROM - 2} y={416} size={150} big dir="left">canjeado</Txt>
+      {step(3, 352, CTA_FROM - 6)}
+      <Small frame={frame} from={358} to={418}>Y tienes un panel de</Small>
+      <Small frame={frame} from={430} to={508}>para conocer a fondo tu</Small>
+      <Small frame={frame} from={520} to={563}>Quién ve tu</Small>
+      <Small frame={frame} from={574} to={CTA_FROM - 6}>y quién ha</Small>
+      <Small frame={frame} from={360} to={CTA_FROM - 6} top={1300} right={80} size={48}>en tu</Small>
+      <Tag frame={frame} from={364} to={CTA_FROM - 6} top={1354} right={60} size={120} rotate={3}>panel</Tag>
 
       <Close frame={frame} />
     </AbsoluteFill>
