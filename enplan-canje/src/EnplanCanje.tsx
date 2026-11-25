@@ -26,6 +26,11 @@ const keys = (frame: number, ks: [number, number[]][]): number[] => {
   return ks[ks.length - 1][1];
 };
 
+// Fondo: blanco y lima. 1 = lima, 0 = blanco. Cambia con un fundido entre escenas.
+const limaBg = (frame: number) => 1 - ramp(frame, 80, 92) + ramp(frame, 202, 214) - ramp(frame, 336, 348);
+// Color de contraste para aros y marcas: blanco sobre lima, lima sobre blanco
+const accent = (frame: number) => (limaBg(frame) > 0.5 ? C.blanco : C.lima);
+
 // ---------- Texto dinámico ----------
 type Dir = "left" | "right" | "up" | "down";
 const OFFSET: Record<Dir, [number, number]> = { left: [-110, 0], right: [110, 0], up: [0, -70], down: [0, 70] };
@@ -41,15 +46,16 @@ const Txt: React.FC<{
   size: number;
   big?: boolean;
   dir?: Dir;
-  color?: string;
   children: React.ReactNode;
-}> = ({ frame, from, to, y, x = 80, align = "left", size, big, dir = "left", color, children }) => {
+}> = ({ frame, from, to, y, x = 80, align = "left", size, big, dir = "left", children }) => {
   if (frame < from || frame >= to) return null;
   const inn = easeOut(ramp(frame, from, from + 12));
   const out = ramp(frame, to - 7, to);
   const [dx, dy] = OFFSET[dir];
   const pos: React.CSSProperties =
     align === "left" ? { left: x } : align === "right" ? { right: 1080 - x } : { left: 0, width: 1080, textAlign: "center" };
+  const mark: React.CSSProperties = big ? { background: accent(frame), borderRadius: 26, padding: "0 20px 8px", display: "inline-block" } : {};
+  const inner = big ? <span style={mark}>{children}</span> : children;
   return (
     <div
       style={{
@@ -62,13 +68,12 @@ const Txt: React.FC<{
         fontSize: size,
         lineHeight: 1.05,
         letterSpacing: big ? "-0.02em" : 0,
-        color: color ?? (big ? C.lima : C.blanco),
-        textShadow: `0 4px 16px rgba(43,43,35,0.55), 0 2px 0 ${C.carbon}`,
+        color: C.carbon,
         opacity: inn * (1 - out),
         transform: `translate(${dx * (1 - inn) - dx * 0.25 * out}px, ${dy * (1 - inn) - dy * 0.25 * out}px)`,
       }}
     >
-      {children}
+      {inner}
     </div>
   );
 };
@@ -84,7 +89,7 @@ const Rings: React.FC<{ frame: number }> = ({ frame }) => {
   return (
     <>
       {rings.map(([x, y, r, p], i) => (
-        <div key={i} style={{ position: "absolute", left: x - r, top: y - r + f(p), width: r * 2, height: r * 2, borderRadius: r, border: `4px solid ${C.lima}`, opacity: 0.28 }} />
+        <div key={i} style={{ position: "absolute", left: x - r, top: y - r + f(p), width: r * 2, height: r * 2, borderRadius: r, border: `6px solid ${accent(frame)}`, opacity: 0.5 }} />
       ))}
     </>
   );
@@ -113,12 +118,12 @@ const Steps: React.FC<{ frame: number }> = ({ frame }) => {
               gap: 10,
               padding: "8px 24px",
               borderRadius: 40,
-              background: on ? C.lima : "transparent",
-              border: `3px solid ${on ? C.lima : "rgba(250,248,243,0.4)"}`,
+              background: on ? C.carbon : "transparent",
+              border: `3px solid ${on ? C.carbon : "rgba(43,43,35,0.35)"}`,
               fontFamily: TITULAR,
               fontWeight: 800,
               fontSize: 30,
-              color: on ? C.carbon : "rgba(250,248,243,0.65)",
+              color: on ? C.lima : "rgba(43,43,35,0.6)",
             }}
           >
             {n}
@@ -154,7 +159,7 @@ const Phone: React.FC<{
         height: PH,
         background: C.carbon,
         borderRadius: 70,
-        boxShadow: `0 0 0 5px ${C.lima}, 0 50px 90px rgba(0,0,0,0.5)`,
+        boxShadow: `0 0 0 6px ${accent(frame)}, 0 40px 80px rgba(43,43,35,0.3)`,
         transformOrigin: "50% 0%",
         transformStyle: "preserve-3d",
         transform: `perspective(1800px) scale(${sc}) rotateY(${rotY + Math.sin(frame / 25) * 1.4}deg) rotateZ(${rotZ}deg) rotateX(${rotX}deg)`,
@@ -174,8 +179,8 @@ const CLIP_KEYS: [number, number[]][] = [
   [0, [540, 1350, 0.72, 24, 0, 8]],
   [26, [560, 780, 0.72, -12, 0, 4]],
   [70, [560, 780, 0.72, -12, 0, 4]],
-  [96, [800, 470, 0.9, -16, 2, 3]],
-  [190, [790, 470, 0.9, -8, 0, 3]],
+  [96, [830, 470, 0.9, -16, 2, 3]],
+  [190, [820, 470, 0.9, -8, 0, 3]],
   [214, [540, 620, 0.88, -6, 0, 3]],
   [310, [540, 620, 0.88, 0, 0, 2]],
   [345, [-420, 620, 0.88, 22, -2, 3]],
@@ -217,7 +222,7 @@ const RedeemCallout: React.FC<{ frame: number }> = ({ frame }) => {
         height: ch,
         borderRadius: 30,
         overflow: "hidden",
-        boxShadow: `0 0 0 ${7 * p}px ${C.lima}, 0 30px 60px rgba(0,0,0,0.45)`,
+        boxShadow: `0 0 0 ${7 * p}px ${accent(frame)}, 0 30px 60px rgba(43,43,35,0.4)`,
         opacity: out,
         transform: `translateZ(${190 * p}px) scale(${0.7 + 0.3 * p})`,
       }}
@@ -289,7 +294,7 @@ const Pop: React.FC<{ frame: number; at: number; until: number; shot: string; re
         height: ch,
         borderRadius: 30,
         overflow: "hidden",
-        boxShadow: `0 0 0 ${7 * p}px ${C.lima}, 0 30px 60px rgba(0,0,0,0.45)`,
+        boxShadow: `0 0 0 ${7 * p}px ${accent(frame)}, 0 30px 60px rgba(43,43,35,0.4)`,
         background: C.blanco,
         opacity: out,
         transform: `translateZ(${150 * p}px) scale(${0.7 + 0.3 * p})`,
@@ -347,12 +352,12 @@ const Close: React.FC<{ frame: number }> = ({ frame }) => {
     [60, 140, 34, 4.2],
   ];
   return (
-    <div style={{ position: "absolute", inset: 0, background: C.arena, opacity: bg }}>
+    <div style={{ position: "absolute", inset: 0, background: C.blanco, opacity: bg }}>
       {dots.map(([x, y, r, p], i) => (
         <div key={i} style={{ position: "absolute", left: x - r, top: y - r + f(p), width: r * 2, height: r * 2, borderRadius: r, background: C.lima }} />
       ))}
       <div style={{ position: "absolute", top: 420, left: 0, width: 1080, display: "flex", justifyContent: "center" }}>
-        <Img src={staticFile("brand/logo/enplan_logo_carbon_sobre_arena.svg")} style={{ width: 560, transform: `scale(${0.7 + 0.3 * logo})`, opacity: Math.min(logo * 1.5, 1) }} />
+        <Img src={staticFile("logo_enplan.svg")} style={{ width: 560, transform: `scale(${0.7 + 0.3 * logo})`, opacity: Math.min(logo * 1.5, 1) }} />
       </div>
       <div style={{ position: "absolute", top: 690, left: 0, width: 1080, textAlign: "center", fontFamily: APOYO, fontWeight: 600, fontSize: 52, lineHeight: 1.25, color: C.carbon, opacity: line, transform: `translateY(${(1 - line) * 40}px)` }}>
         Aparece ante quienes buscan
@@ -381,7 +386,8 @@ export const EnplanCanje: React.FC = () => {
   useBrandFonts();
   const frame = useCurrentFrame();
   return (
-    <AbsoluteFill style={{ background: C.carbon }}>
+    <AbsoluteFill style={{ background: C.blanco }}>
+      <AbsoluteFill style={{ background: C.lima, opacity: limaBg(frame) }} />
       <Rings frame={frame} />
       <Steps frame={frame} />
 
@@ -393,19 +399,18 @@ export const EnplanCanje: React.FC = () => {
       <Txt frame={frame} from={10} to={74} y={340} size={128} big dir="left">tu negocio</Txt>
       <Txt frame={frame} from={18} to={74} y={492} size={64} dir="left">en enplan</Txt>
 
-      {/* 2. Perfil: logo, fotos, datos */}
-      <Txt frame={frame} from={96} to={206} y={540} size={52} dir="left">Pones tu</Txt>
-      <Txt frame={frame} from={98} to={206} y={585} size={150} big dir="left">logo</Txt>
-      <Txt frame={frame} from={134} to={206} y={770} size={52} dir="left">tus</Txt>
-      <Txt frame={frame} from={136} to={206} y={815} size={128} big dir="left">fotos</Txt>
-      <Txt frame={frame} from={168} to={206} y={970} size={52} dir="left">y llenas tu</Txt>
-      <Txt frame={frame} from={170} to={206} y={1015} size={112} big dir="left">perfil</Txt>
+      {/* 2. Perfil: logo y fotos */}
+      <Txt frame={frame} from={96} to={200} y={520} size={56} dir="left">Llena tu perfil</Txt>
+      <Txt frame={frame} from={106} to={200} y={600} size={48} dir="left">con tu</Txt>
+      <Txt frame={frame} from={108} to={200} y={650} size={150} big dir="left">logo</Txt>
+      <Txt frame={frame} from={142} to={200} y={850} size={48} dir="left">y tus</Txt>
+      <Txt frame={frame} from={144} to={200} y={900} size={116} big dir="left">fotos</Txt>
 
       {/* 3. Descuento */}
-      <Txt frame={frame} from={214} to={298} y={348} size={60} dir="down">Pones tu</Txt>
-      <Txt frame={frame} from={218} to={298} y={416} size={140} big dir="down">descuento</Txt>
-      <Txt frame={frame} from={304} to={344} y={348} x={1000} align="right" size={56} dir="right">y tus clientes</Txt>
-      <Txt frame={frame} from={308} to={344} y={412} x={1000} align="right" size={124} big dir="right">lo canjean</Txt>
+      <Txt frame={frame} from={216} to={298} y={348} size={60} dir="down">Elige tu</Txt>
+      <Txt frame={frame} from={220} to={298} y={416} size={140} big dir="down">descuento</Txt>
+      <Txt frame={frame} from={304} to={336} y={348} x={1000} align="right" size={56} dir="right">y tus clientes</Txt>
+      <Txt frame={frame} from={308} to={336} y={412} x={1000} align="right" size={124} big dir="right">lo canjean</Txt>
 
       {/* 4. Panel de métricas */}
       <Txt frame={frame} from={352} to={418} y={348} size={56} dir="left">Y tienes un panel</Txt>
