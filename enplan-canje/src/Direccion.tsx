@@ -11,12 +11,14 @@ const CLIP_W = 562;
 const K = CLIP_W / 1080;
 
 // El punto del logo: círculo lima, un poco más chico que la altura de la letra
-const Dot: React.FC<{ size: number; color?: string; style?: React.CSSProperties }> = ({ size, color = C.lima, style }) => (
+export const Dot: React.FC<{ size: number; color?: string; style?: React.CSSProperties }> = ({ size, color = C.lima, style }) => (
   <span style={{ display: "inline-block", width: size, height: size, borderRadius: size, background: color, ...style }} />
 );
 
 // Celular con el clip y la tarjeta "Muestra al negocio" saliendo hacia ti
-const Shot: React.FC<{
+export const Shot: React.FC<{
+  frame?: number;
+  callout?: boolean;
   cx: number;
   top: number;
   sc: number;
@@ -26,7 +28,7 @@ const Shot: React.FC<{
   shadow: string;
   calloutRing?: string;
   badge?: React.ReactNode;
-}> = ({ cx, top, sc, rotY, body = C.carbon, ring, shadow, calloutRing, badge }) => {
+}> = ({ frame = FRAME, callout = true, cx, top, sc, rotY, body = C.carbon, ring, shadow, calloutRing, badge }) => {
   const PW = CLIP_W + BEZEL * 2;
   const [x, y, w, h] = [50, 830, 980, 395];
   const f = K * 1.4;
@@ -47,9 +49,10 @@ const Shot: React.FC<{
       }}
     >
       <div style={{ position: "absolute", left: BEZEL, top: BEZEL, width: CLIP_W, height: SCREEN_H, borderRadius: 52, overflow: "hidden", background: C.arena }}>
-        <OffthreadVideo src={staticFile("canje.mp4")} startFrom={FRAME} muted style={{ width: CLIP_W, height: SCREEN_H }} />
+        <OffthreadVideo src={staticFile("canje.mp4")} startFrom={frame} muted style={{ width: CLIP_W, height: SCREEN_H }} />
       </div>
       <div style={{ position: "absolute", top: BEZEL + 10, left: PW / 2 - 40, width: 80, height: 18, borderRadius: 9, background: C.carbon }} />
+      {callout && (
       <div
         style={{
           position: "absolute",
@@ -61,10 +64,11 @@ const Shot: React.FC<{
         }}
       >
         <div style={{ position: "absolute", inset: 0, borderRadius: 30, overflow: "hidden", boxShadow: `${calloutRing ? `0 0 0 7px ${calloutRing}, ` : ""}0 30px 60px rgba(43,43,35,0.35)` }}>
-          <OffthreadVideo src={staticFile("canje.mp4")} startFrom={FRAME} muted style={{ position: "absolute", left: -x * f, top: -y * f, width: 1080 * f, height: 1920 * f, maxWidth: "none" }} />
+          <OffthreadVideo src={staticFile("canje.mp4")} startFrom={frame} muted style={{ position: "absolute", left: -x * f, top: -y * f, width: 1080 * f, height: 1920 * f, maxWidth: "none" }} />
         </div>
         {badge}
       </div>
+      )}
     </div>
   );
 };
