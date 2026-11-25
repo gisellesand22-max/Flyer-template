@@ -2,8 +2,9 @@ import React from "react";
 import { AbsoluteFill, Img, OffthreadVideo, staticFile, useCurrentFrame } from "remotion";
 import { FRAMES } from "./brand";
 
-const vid = (style?: React.CSSProperties) => (
+const vid = (style?: React.CSSProperties, muted = false) => (
   <OffthreadVideo
+    muted={muted}
     src={staticFile("toma.mp4")}
     style={{ width: "100%", height: "100%", objectFit: "cover", ...style }}
   />
@@ -28,7 +29,7 @@ export const Person: React.FC = () => {
         maskSize: "100% 100%",
       }}
     >
-      {vid()}
+      {vid(undefined, true)}
       {/* Precarga la silueta para que Remotion espere a que cargue */}
       <Img src={m} style={{ display: "none" }} />
     </AbsoluteFill>
