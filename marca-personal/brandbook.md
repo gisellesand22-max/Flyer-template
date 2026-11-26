@@ -2,7 +2,7 @@
 
 Guía para que todos tus videos de TikTok se vean y suenen igual.
 
-Última actualización: 25 de noviembre de 2026. Cambios de esta versión: se elimina el color Tinta, el Aqua pasa a ser el color principal con sus variaciones, y se añade el estilo de edición con texto animado, texto detrás de ti y split screen.
+Última actualización: 26 de noviembre de 2026. Cambios de esta versión: el Aqua es el color principal, se elimina el color Tinta, el estilo de edición queda minimalista (una sola familia, solo cambia el tamaño, zoom en el video, texto detrás de ti, logos y split screen con capturas) y la fuente pixel gana más presencia.
 
 ---
 
@@ -95,10 +95,13 @@ Nota: el color principal de la marca es Aqua. Aqua profundo y Aqua medio son ton
 
 ### Sobre video
 
-Cuando el fondo sea una imagen o video, usa una de estas dos opciones:
+Estilo final: **texto directo sobre el video, sin cajas, sin bordes y sin sombras.** El color depende del fondo:
 
-1. **Caja:** texto en caja blanca o aqua profundo, con borde aqua profundo y sombra aqua.
-2. **Texto grande sin caja:** solo en tamaño grande. Blanco o aqua con contorno aqua profundo, o aqua profundo con contorno blanco. Revisa que se lea en cada escena.
+1. **Sobre pared o fondo claro:** aqua profundo.
+2. **Sobre ropa, cabello o fondo oscuro:** blanco, con una sombra suave para que se lea.
+3. **Palabra gigante detrás de ti:** aqua, solo en tamaño muy grande.
+
+Revisa que se lea en cada escena. Si no se lee, cambia de posición antes de agregar caja o borde. La caja blanca con borde y sombra aqua queda como opción de respaldo para subtítulos difíciles.
 
 ### Proporción de uso (propuesta)
 
@@ -118,13 +121,14 @@ Fuente gratuita de Google Fonts. Es la fuente principal.
 
 | Uso | Peso |
 |---|---|
-| Títulos en pantalla | Bold (700) |
-| Subtítulos hablados | SemiBold (600) |
+| Palabras clave grandes y títulos | ExtraBold (800) o Black (900) |
+| Título de la serie (ANOTHER) | Bold (700) |
+| Palabras de apoyo y subtítulos | SemiBold (600) |
 | Textos pequeños, fuentes, datos | Regular (400) |
 
 ### Pixel Baru (acentos)
 
-Fuente pixelada para el toque tech. Úsala para: palabras clave, números, nombres de producto, etiquetas como "NUEVO" o "TOP 3", y para combinar con Poppins en el título de la serie.
+Fuente pixelada para el toque tech. Tiene más presencia que en la versión anterior. Úsala para: palabras clave, números, nombres de producto, etiquetas como "NUEVO", "TOP 3" o "BETA", el título de la serie y la palabra más importante de cada frase importante.
 
 > Nota: dijiste que creo que viene de CapCut. No lo he verificado. Revisa en CapCut qué fuentes trae y si su licencia permite uso comercial, sobre todo si haces contenido patrocinado.
 
@@ -137,10 +141,13 @@ Fuente pixelada para el toque tech. Úsala para: palabras clave, números, nombr
 ### Reglas
 
 1. Poppins para frases completas.
-2. Pixel para palabras sueltas o títulos muy cortos.
+2. Pixel para palabras sueltas o títulos muy cortos. Nunca para frases largas.
 3. Máximo dos fuentes por video.
-4. Un solo acento pixel por escena. Excepción: el título de la serie, que mezcla Poppins y pixel.
-5. Varía el tamaño de las palabras dentro de una misma frase: la palabra clave más grande, las de apoyo más pequeñas.
+4. Mezcla de uso (propuesta): de cada 3 palabras clave en pantalla, 1 va en pixel. Antes era 1 de cada 6.
+5. Hasta dos acentos pixel por escena. Excepción: el título de la serie, que mezcla Poppins y pixel sin límite.
+6. El título del video lleva siempre una palabra en pixel.
+7. Cuando la palabra va en pixel, agrándala un poco: la fuente pixel se ve más chica que Poppins con el mismo tamaño.
+8. Solo cambia el tamaño: no mezcles más estilos (cursiva, subrayado, contornos) en una misma frase.
 
 ---
 
@@ -148,30 +155,32 @@ Fuente pixelada para el toque tech. Úsala para: palabras clave, números, nombr
 
 | Elemento | Estilo |
 |---|---|
-| Subtítulos hablados | Poppins Bold, aqua profundo sobre caja blanca, con borde aqua profundo y sombra aqua |
-| Palabra clave resaltada | Fondo aqua con texto aqua profundo, o pasa a Pixel |
-| Título de apertura | Poppins Bold grande, 3 a 6 palabras máximo |
-| Etiquetas ("TOP 3", "NUEVO") | Pixel, aqua sobre aqua profundo |
-| Datos y precios | Pixel o Poppins Bold, aqua profundo con resaltado aqua |
+| Palabras clave en pantalla | Poppins ExtraBold (800) o Black (900) en tamaño grande, con la palabra de apoyo en SemiBold (600) más chica. 1 de cada 3 palabras clave va en pixel |
+| Título de apertura | Poppins grande, con una palabra en pixel. 2 a 3 palabras |
+| Etiquetas ("TOP 3", "NUEVO", "BETA") | Pixel grande, aqua profundo o aqua sobre aqua profundo |
+| Datos, precios y números | Pixel |
+| Subtítulos hablados, si los usas | Poppins SemiBold, aqua profundo o blanco según el fondo |
 
 ### Título del video (segundos 0 a 5)
 
 Cada video abre con su título en pantalla durante los primeros 3 a 5 segundos.
 
 1. El título es el tema del video. Ejemplo: **Negocios en ChatGPT**.
-2. Mezcla tamaños: una palabra muy grande y las demás más pequeñas.
-3. Combina Poppins Bold con una palabra en pixel.
-4. Entra con una animación simple y sale antes de pasar al desarrollo.
+2. Mezcla tamaños: una palabra muy grande (ChatGPT) y las demás más pequeñas ("Negocios en").
+3. Combina Poppins con una palabra en pixel.
+4. Va abajo a la derecha, en blanco, sobre la ropa o el cabello. Si aparece el logo de la herramienta, va al lado de la palabra.
+5. Entra con una animación simple y sale antes de pasar al desarrollo, hacia el segundo 5.
 
 ### Título de la serie
 
 La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 
-1. Aparece después del gancho.
-2. Aparece de nuevo cada vez que la dices en voz alta, sincronizada con la palabra.
-3. Combina Poppins Bold y pixel, alternando por palabra o por línea.
-4. Juega con los tamaños: por ejemplo, DAY y UPDATE más grandes que ANOTHER.
-5. Colores: aqua profundo, aqua y blanco. Ver combinaciones permitidas en la sección 3.
+1. Aparece cuando la dices en voz alta, palabra por palabra, sincronizada con tu voz.
+2. **Se queda en pantalla unos 2 segundos después de decirla.**
+3. Tamaño grande y legible: ANOTHER en Poppins Bold 60 px y DAY en pixel 76 px, sobre 1080 px de ancho.
+4. UPDATE va gigante y en aqua, detrás de ti. Poppins Black, unos 230 px.
+5. Se ubica arriba, en la zona de pared, debajo de la lámpara y de la interfaz de TikTok.
+6. Colores: aqua profundo para el texto delante, aqua para el detrás. Ver combinaciones permitidas en la sección 3.
 
 ### Reglas
 
@@ -188,25 +197,40 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 2. **Ritmo:** cortes rápidos. Se cortan los silencios y las pausas largas.
 3. **Pantalla:** muestra el producto o la herramienta lo más pronto posible.
 4. **Transiciones:** simples. Corte directo o un zoom corto.
-5. **Efecto pixel:** un detalle retro por video (transición, sello o contador), no más. El título de la serie no cuenta.
+5. **Efecto pixel:** además del texto en pixel, un detalle retro por video (transición, sello o contador).
 6. **Música:** que acompañe, nunca que tape tu voz.
-7. **Estilo visual:** interfaz limpia de app. Tarjetas blancas con borde aqua profundo, esquinas muy redondeadas y sombra aqua sólida. Subtítulos en píldora blanca con la palabra clave sobre fondo aqua. Una etiqueta del tema arriba, también en píldora.
+7. **Estilo visual: minimalista.** Mucho espacio, una sola familia a la vez, sin cajas, bordes ni sombras. Solo cambian el tamaño y la posición del texto.
 8. **Movimiento:** entradas rápidas y suaves, con poco rebote.
+9. **Zoom del video:** en cada corte alterna acercamiento y alejamiento para disimular el corte, y da un zoom rápido cuando dices una palabra clave. El zoom nunca pasa de aproximadamente 1.3 veces el tamaño original.
+10. **Zoom del texto:** cada palabra entra creciendo desde un tamaño más chico, crece despacio mientras está en pantalla y sale con un zoom corto.
 
 ### Jugar con las palabras
 
-1. Las palabras importantes se animan: entran, crecen, se desplazan o cambian de tamaño al decirlas.
-2. Varía el tamaño y la posición del texto. No lo dejes siempre abajo y al centro.
-3. Puedes poner palabras detrás de ti: el texto queda entre el fondo y tu figura, para dar profundidad. Funciona mejor con palabras grandes y un fondo limpio.
-4. Animaciones simples y modernas: aparecer con escala, deslizar, escribirse letra por letra, cambiar de Poppins a pixel.
-5. Una idea animada a la vez. No más de dos textos animados en pantalla.
+1. Una palabra clave por momento, sincronizada con la palabra que dices.
+2. Varía el tamaño y la posición: izquierda, derecha y centro. Alterna entre palabras muy grandes (150 a 230 px) y de apoyo chicas (56 a 90 px).
+3. Texto detrás de ti: la palabra va entre el fondo y tu figura. Úsala 2 o 3 veces por video, con palabras de 6 a 8 letras y tamaño muy grande. Funciona con fondo limpio y tu cabeza tapando solo la parte baja de las letras.
+4. Cambia de Poppins a pixel en palabras como BETA, DAY o UPDATE.
+5. Una idea animada a la vez. No más de dos textos en pantalla.
+6. Ubicación segura: arriba en la zona de pared, debajo de la lámpara o de objetos oscuros. Evita pasar texto oscuro sobre tu cabello.
+7. Cuando entra un split screen, quita las palabras grandes de esos segundos para no tapar la captura.
 
 ### Split screen
 
-1. Úsalo para comparar o para mostrar el producto junto a ti.
-2. Divide en dos mitades (arriba y abajo en vertical) o en tarjetas con esquinas redondeadas.
-3. Separa las partes con una línea o borde aqua profundo.
-4. Una parte lleva tu cara hablando y la otra el producto, la pantalla o el b roll.
+1. Úsalo para mostrar el proceso o el producto mientras lo explicas.
+2. Dos mitades en vertical: arriba la captura sobre un panel aqua, abajo tu video con la cara visible.
+3. La captura lleva esquinas redondeadas y sin borde ni sombra.
+4. La transición es una animación corta: el panel baja desde arriba y tu video se desplaza a la mitad inferior.
+5. Haz zoom a la parte de la captura que mencionas. Ejemplo: primero a "Menciones" y luego a "Clics".
+6. Usa solo capturas reales de tu cuenta. Si el panel está vacío, se verá vacío: considera esperar a tener datos.
+7. Cuida los datos privados que aparezcan en la captura.
+
+### Logos
+
+1. Cuando nombres una herramienta o marca (ChatGPT, Google Maps), muestra su logo al lado de la palabra, en el segundo exacto en que lo dices.
+2. Entra con un giro corto y escala, y sale con la palabra.
+3. Tamaño pequeño o mediano, de 90 a 110 px de alto. No compite con la palabra.
+4. Versión negra sobre fondo claro y blanca sobre fondo oscuro.
+5. No cambies el color ni deformes los logos. Usa los archivos oficiales o los que tengas autorizados.
 
 ### Videos de apoyo (b roll)
 
@@ -219,11 +243,12 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 
 1. Plantilla de subtítulos
 2. Caja de título de apertura
-3. Título de la serie ANOTHER DAY ANOTHER UPDATE
-4. Sello pixel ("TOP 3", "NUEVO", "PROBADO")
-5. Plantilla de split screen
-6. Pantalla final con llamado a la acción
-7. Marco o esquina con tu marca
+3. Título de la serie ANOTHER DAY ANOTHER UPDATE, con UPDATE detrás de ti
+4. Sello pixel ("TOP 3", "NUEVO", "BETA", "PROBADO")
+5. Plantilla de split screen con panel aqua y zoom a la captura
+6. Logos en negro y blanco de las herramientas que usas
+7. Pantalla final con llamado a la acción
+8. Marco o esquina con tu marca
 
 ---
 
@@ -231,7 +256,7 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 
 1. Fondo blanco o aqua claro, con títulos en aqua profundo.
 2. Título de 3 a 5 palabras en Poppins Bold.
-3. Una palabra en Pixel como acento.
+3. Una palabra en Pixel como acento, en tamaño grande.
 4. El producto o tu cara grande en primer plano.
 5. Todo dentro del margen seguro, que no se corte en la cuadrícula de perfil.
 
@@ -241,12 +266,15 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 
 1. Colores fuera de la paleta aqua. No uses el antiguo Tinta (`#0E2F3A`).
 2. Texto blanco sobre aqua, aqua sobre aqua claro, o aqua sobre blanco.
-3. Párrafos en fuente pixel.
-4. Más de un efecto pixel por escena, fuera del título de la serie.
+3. Párrafos o frases largas en fuente pixel.
+4. Más de dos acentos pixel por escena, fuera del título de la serie.
 5. Frases largas en pantalla.
 6. Texto detrás de ti que no se lea o que tape tu cara.
 7. Videos de internet sin revisar la licencia.
-8. Prometer resultados que no probaste.
+8. Cajas, bordes y sombras en el texto (estilo anterior).
+9. Mostrar capturas inventadas o editadas. Solo capturas reales.
+10. Texto grande que tape las capturas o tu cara.
+11. Prometer resultados que no probaste.
 
 ---
 
@@ -254,15 +282,18 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 
 1. ¿El gancho está en los primeros 2 segundos?
 2. ¿El título del video aparece en los primeros 3 a 5 segundos?
-3. ¿El título de la serie aparece después del gancho y cuando lo digo?
+3. ¿El título de la serie aparece cuando lo digo y se queda unos 2 segundos?
 4. ¿Solo uso aqua profundo, aqua medio, aqua, aqua claro y blanco?
 5. ¿Los subtítulos se leen sobre cualquier escena?
-6. ¿Poppins domina y Pixel es solo acento?
+6. ¿Poppins domina y Pixel aparece en 1 de cada 3 palabras clave?
 7. ¿Corté los silencios?
-8. ¿Revisé la licencia de cada video de apoyo?
-9. ¿Suena cercano, directo y sin jerga?
-10. ¿Probé lo que recomiendo?
-11. ¿Hay un llamado a la acción corto?
+8. ¿El video hace zoom en los cortes y en las palabras clave?
+9. ¿Los logos aparecen justo cuando nombro la herramienta?
+10. ¿Las capturas son reales y no muestran datos privados?
+11. ¿Revisé la licencia de cada video de apoyo, si usé alguno?
+12. ¿Suena cercano, directo y sin jerga?
+13. ¿Probé lo que recomiendo?
+14. ¿Hay un llamado a la acción corto?
 
 ---
 
@@ -274,3 +305,4 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 4. Plantillas reales en CapCut
 5. Confirmar los tonos Aqua profundo y Aqua medio
 6. Regenerar `paleta-color.webp`, que todavía muestra el color Tinta
+7. Aplicar la nueva proporción de pixel al video `negocios_chatgpt_v2.mp4`, que todavía usa pixel solo en DAY y BETA
