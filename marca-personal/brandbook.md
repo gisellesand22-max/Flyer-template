@@ -134,6 +134,8 @@ Fuente pixelada para el toque tech. Tiene más presencia que en la versión ante
 
 > Decisión en el video Tech 0 Drama: se usó **Pixelify Sans** en lugar de Silkscreen, porque en Silkscreen la N se lee como H ("LENTO" parecía "LEHTO") y el 0 se lee como I. Pixelify Sans lee bien las letras y los números. Pixel Baru sigue pendiente.
 
+> Nota de lectura (Pixelify Sans): en tamaños muy grandes la letra C se lee como O o Q. Para siglas y palabras que empiecen con C (por ejemplo CURP) usa Poppins, y deja el pixel para palabras como "biométrica", "HORA" o "QR".
+
 **Alternativas pixeladas gratuitas en Google Fonts:**
 
 1. Silkscreen

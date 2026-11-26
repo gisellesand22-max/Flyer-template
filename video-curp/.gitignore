@@ -1,0 +1,10 @@
+node_modules/
+assets/
+public/*.mp4
+output/*.mp4
+output/muestras/
+out/
+public/matte/
+output/prueba/
+assets/
+output/prueba/
