@@ -216,7 +216,27 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 6. Ubicación segura: arriba en la zona de pared, debajo de la lámpara o de objetos oscuros. Evita pasar texto oscuro sobre tu cabello.
 7. Cuando entra un split screen, quita las palabras grandes de esos segundos para no tapar la captura.
 
-### Split screen
+### Tú a pantalla completa con palabras alrededor (formato principal)
+
+1. La mayor parte del video eres tú a pantalla completa. Las palabras funcionan como subtítulos creativos, no como cajas.
+2. Posiciones que se alternan: **arriba** de tu cabeza, **a los lados** (chicas), **detrás** de ti y **encima** de ti sobre la ropa.
+3. Cambia el tamaño todo el tiempo: palabras gigantes (170 a 230 px) junto a palabras de apoyo chicas (70 a 100 px).
+4. Para que el aqua se lea sobre cualquier fondo, el fondo del video se tiñe de aqua profundo (aprox. 50%) y tu figura queda sin teñir. Para esto se recorta tu figura con un modelo de segmentación.
+5. Las palabras van en aqua. Si van encima de tu ropa clara, van en aqua profundo.
+6. Las ilustraciones (reloj, señales, celular) van pequeñas al lado de ti, sin tapar tu cara.
+7. Una palabra aparece solo cuando la dices y sale con un zoom corto.
+
+### Portada y apertura
+
+1. La portada es un cuadro de los primeros 4 segundos del video, no una pantalla dividida.
+2. Tú en tamaño reducido (70%), anclada abajo, sobre el mapa o la imagen del tema con un degradado de aqua profundo.
+3. Los costados de tu figura se difuminan para que no se vean los bordes rectos del cuadro original.
+4. Las palabras van en aqua: la serie arriba, el título en varios tamaños y una palabra en pixel.
+5. Al segundo 6 tu figura crece hasta el tamaño completo mientras el fondo se desvanece, y sigue el video.
+
+### Split screen (solo en algunas tomas)
+
+Se usa únicamente cuando hay algo que mostrar que no cabe como palabra: una animación, un mapa o una captura. El resto del video es tú a pantalla completa.
 
 1. Úsalo para mostrar el proceso o el producto mientras lo explicas.
 2. Dos mitades en vertical: arriba la captura sobre un panel aqua, abajo tu video con la cara visible.

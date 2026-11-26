@@ -2,8 +2,9 @@
 # Uso: python3 scripts/cortar_silencios.py assets/original.mov public/toma.mp4
 import subprocess, sys, json
 src, out = sys.argv[1], sys.argv[2]
+# Se quitó el primer "¡Mira!" (original 18.53 a 18.89): lo dices dos veces seguidas.
 # Tramos con voz (ffmpeg silencedetect, -32 dB, pausas de 0.3 s o más), con 0.06 s de margen por lado.
-segs = [(0.91,3.286),(3.713,6.81),(7.567,13.118),(13.50,17.758),(18.531,18.893),(19.794,21.083),(21.43,25.073),(25.289,27.115),(27.367,29.242),(29.577,32.908)]
+segs = [(0.91,3.286),(3.713,6.81),(7.567,13.118),(13.50,17.758),(19.794,21.083),(21.43,25.073),(25.289,27.115),(27.367,29.242),(29.577,32.908)]
 n=len(segs); f=[]
 f.append(f"[0:v]fps=30,scale=1080:1920,format=yuv420p,split={n}"+"".join(f"[v{i}]" for i in range(n)))
 f.append(f"[0:a:0]aformat=sample_rates=48000:channel_layouts=stereo,asplit={n}"+"".join(f"[a{i}]" for i in range(n)))

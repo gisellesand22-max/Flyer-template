@@ -57,3 +57,14 @@ Una de cada tres palabras clave va en pixel.
 2. Hecho: split screen completo, título y serie, logo oficial de Google Maps, animación de carretera con carros, mapa con tráfico en rojo, reloj, choques y obras, celular como ilustración, cierre.
 3. Pendiente: reemplazar el celular ilustrado (segundos 15.4 a 24.2) por las 4 capturas reales.
 4. La fuente pixel cambió a Pixelify Sans.
+
+## 8. Versión 2 (26 de noviembre)
+
+Cambios pedidos: quitar el "Mira" repetido, split screen solo en algunas tomas, palabras alrededor de ti, portada sin split screen.
+
+1. Se quitó el primer "¡Mira!" (original 18.53 a 18.89). El video queda en 27.3 s.
+2. Split screen solo del segundo 6 al 11.1: carretera con carros y tu mapa con tráfico en rojo.
+3. El resto: tú a pantalla completa con palabras arriba, a los lados, detrás y encima de ti, y tamaños muy distintos.
+4. El celular ilustrado va al lado de ti, no en split screen. Cuando lleguen las capturas reales se pueden poner en split screen o dentro del celular.
+5. Portada: tú sobre el mapa con degradado, palabras en aqua. Archivo: `output/portada.png`.
+6. Video: `output/tech0drama_googlemaps_trafico_v2.mp4`.

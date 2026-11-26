@@ -24,7 +24,7 @@ export const POPPINS = "Poppins, sans-serif";
 export const PIXEL = "'Pixelify Sans', monospace";
 
 export const FPS = 30;
-export const FRAMES = 831;
+export const FRAMES = 819;
 
 // Rebote de entrada que arranca en el segundo `at` (tiempo del video cortado)
 export const usePop = (at: number, damping = 13) => {
