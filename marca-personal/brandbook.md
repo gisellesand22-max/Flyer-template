@@ -132,6 +132,8 @@ Fuente pixelada para el toque tech. Tiene más presencia que en la versión ante
 
 > Nota: dijiste que creo que viene de CapCut. No lo he verificado. Revisa en CapCut qué fuentes trae y si su licencia permite uso comercial, sobre todo si haces contenido patrocinado.
 
+> Decisión en el video Tech 0 Drama: se usó **Pixelify Sans** en lugar de Silkscreen, porque en Silkscreen la N se lee como H ("LENTO" parecía "LEHTO") y el 0 se lee como I. Pixelify Sans lee bien las letras y los números. Pixel Baru sigue pendiente.
+
 **Alternativas pixeladas gratuitas en Google Fonts:**
 
 1. Silkscreen
@@ -223,6 +225,13 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 5. Haz zoom a la parte de la captura que mencionas. Ejemplo: primero a "Menciones" y luego a "Clics".
 6. Usa solo capturas reales de tu cuenta. Si el panel está vacío, se verá vacío: considera esperar a tener datos.
 7. Cuida los datos privados que aparezcan en la captura.
+
+### Animaciones propias (ilustraciones)
+
+1. Para explicar una idea sin capturas se pueden usar ilustraciones simples: carretera con carros, celular, reloj, señales de choque y obras.
+2. Van en el panel superior del split screen, en colores aqua. Línea y trazo en aqua profundo, rellenos en aqua claro o blanco.
+3. Excepción de color: la línea de tráfico puede pasar a rojo (`#EA4335`, el rojo de Google Maps) cuando el tema es el tráfico. Es la única vez que se usa un color fuera de la paleta.
+4. Son ilustraciones, no pantallas reales. Si hablas de un paso de una app, usa tu captura real cuando la tengas.
 
 ### Logos
 

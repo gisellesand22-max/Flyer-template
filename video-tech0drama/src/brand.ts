@@ -3,9 +3,12 @@ import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
 import "@fontsource/poppins/800.css";
 import "@fontsource/poppins/900.css";
-import "@fontsource/silkscreen/400.css";
-import "@fontsource/silkscreen/700.css";
+import "@fontsource/pixelify-sans/700.css";
 import { spring, useCurrentFrame, useVideoConfig } from "remotion";
+
+// Rebote de entrada puro (sin hooks): arranca en el segundo `at`
+export const popAt = (frame: number, fps: number, at: number, damping = 14) =>
+  spring({ frame: frame - at * fps, fps, config: { damping, stiffness: 190, mass: 0.6 } });
 
 // Paleta del brandbook: aqua (principal) y sus variaciones, más blanco
 export const C = {
@@ -16,8 +19,9 @@ export const C = {
   white: "#FFFFFF",
 };
 export const POPPINS = "Poppins, sans-serif";
-// Silkscreen hace de fuente pixel mientras se define Pixel Baru (ver brandbook)
-export const PIXEL = "Silkscreen, monospace";
+// Pixelify Sans hace de fuente pixel mientras se define Pixel Baru (ver brandbook).
+// Se eligió sobre Silkscreen porque su N y su 0 se leen bien.
+export const PIXEL = "'Pixelify Sans', monospace";
 
 export const FPS = 30;
 export const FRAMES = 831;

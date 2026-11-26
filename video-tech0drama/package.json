@@ -3,11 +3,11 @@
   "private": true,
   "scripts": {
     "studio": "remotion studio",
-    "render": "remotion render src/index.ts Portada output/portada.png --codec=h264"
+    "render": "remotion render src/index.ts Video output/tech0drama_googlemaps_trafico.mp4 --codec=h264"
   },
   "dependencies": {
+    "@fontsource/pixelify-sans": "^5.3.0",
     "@fontsource/poppins": "5.1.0",
-    "@fontsource/silkscreen": "5.1.0",
     "@remotion/cli": "4.0.538",
     "react": "18.3.1",
     "react-dom": "18.3.1",

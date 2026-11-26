@@ -50,3 +50,10 @@ Una de cada tres palabras clave va en pixel.
 2. Confirmar que "2 segundos extras" significa que la serie dura hasta el segundo 6.
 3. Enviar las 4 capturas que faltan.
 4. Revisar el cero pixel: en Silkscreen tiene un punto en el centro y puede leerse como una "I".
+
+## 7. Estado (26 de noviembre)
+
+1. Versión 1 renderizada: `output/tech0drama_googlemaps_trafico.mp4`. Portada: `output/portada.png`.
+2. Hecho: split screen completo, título y serie, logo oficial de Google Maps, animación de carretera con carros, mapa con tráfico en rojo, reloj, choques y obras, celular como ilustración, cierre.
+3. Pendiente: reemplazar el celular ilustrado (segundos 15.4 a 24.2) por las 4 capturas reales.
+4. La fuente pixel cambió a Pixelify Sans.
