@@ -177,14 +177,13 @@ Cada video abre con su título en pantalla durante los primeros 3 a 5 segundos.
 
 ### Título de la serie
 
-La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
+La serie se llama **ANOTHER DAY ANOTHER UPDATE** y se escribe siempre igual en todos los videos. La especificación exacta está en `CLAUDE.md` y el código en `marca-personal/componentes/SerieAnotherDay.tsx`.
 
-1. Aparece cuando la dices en voz alta, palabra por palabra, sincronizada con tu voz.
-2. **Se queda en pantalla unos 2 segundos después de decirla.**
-3. Tamaño grande y legible: ANOTHER en Poppins Bold 60 px y DAY en pixel 76 px, sobre 1080 px de ancho.
-4. UPDATE va gigante y en aqua, detrás de ti. Poppins Black, unos 230 px.
-5. Se ubica arriba, en la zona de pared, debajo de la lámpara y de la interfaz de TikTok.
-6. Colores: aqua profundo para el texto delante, aqua para el detrás. Ver combinaciones permitidas en la sección 3.
+1. Dos filas en mayúsculas, alineadas a la derecha, arriba a la derecha: "ANOTHER DAY" y "ANOTHER UPDATE".
+2. ANOTHER en Poppins ExtraBold 74 px. DAY y UPDATE en pixel 110 px.
+3. Aqua profundo sobre fondo claro. Aqua solo sobre fondo oscuro.
+4. Cada palabra entra con zoom cuando Giselle la dice. Si no la dice, aparece al inicio con los tiempos por defecto.
+5. Se queda al inicio junto con el título del video, hasta unos 4 segundos, para tomar la portada.
 
 ### Reglas
 
