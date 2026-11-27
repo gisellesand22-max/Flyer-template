@@ -223,18 +223,18 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE**.
 1. La mayor parte del video eres tú a pantalla completa. Las palabras funcionan como subtítulos creativos, no como cajas.
 2. Posiciones que se alternan: **arriba** de tu cabeza, **a los lados** (chicas), **detrás** de ti y **encima** de ti sobre la ropa.
 3. Cambia el tamaño todo el tiempo: palabras gigantes (170 a 230 px) junto a palabras de apoyo chicas (70 a 100 px).
-4. Para que el aqua se lea sobre cualquier fondo, el fondo del video se tiñe de aqua profundo (aprox. 50%) y tu figura queda sin teñir. Para esto se recorta tu figura con un modelo de segmentación.
-5. Las palabras van en aqua. Si van encima de tu ropa clara, van en aqua profundo.
+4. **El fondo del video se deja natural.** No se tiñe ni se cambia por un fondo azul: el teñido aqua profundo y el degradado no gustaron en el video de CURP. Para poner palabras detrás de ti se recorta tu figura con un modelo de segmentación.
+5. El color del texto depende de lo que tenga detrás: aqua profundo sobre pared o fondo claro, aqua sobre tu ropa oscura, y aqua medio para las palabras gigantes detrás de tu cabeza (el aqua claro se pierde sobre fondos blancos).
 6. Las ilustraciones (reloj, señales, celular) van pequeñas al lado de ti, sin tapar tu cara.
 7. Una palabra aparece solo cuando la dices y sale con un zoom corto.
 
 ### Portada y apertura
 
 1. La portada es un cuadro de los primeros 4 segundos del video, no una pantalla dividida.
-2. Tú en tamaño reducido (70%), anclada abajo, sobre el mapa o la imagen del tema con un degradado de aqua profundo.
-3. Los costados de tu figura se difuminan para que no se vean los bordes rectos del cuadro original.
-4. Las palabras van en aqua: la serie arriba, el título en varios tamaños y una palabra en pixel.
-5. Al segundo 6 tu figura crece hasta el tamaño completo mientras el fondo se desvanece, y sigue el video.
+2. **Formato por defecto:** tú a pantalla completa con tu fondo natural. La serie va arriba a la derecha en aqua profundo, y el título del video va muy grande sobre tu ropa oscura en aqua, con una palabra en pixel.
+3. Ambos títulos se quedan visibles al inicio (hasta unos 4 segundos) para poder tomar la captura.
+4. Evita el pixel en la letra C de títulos grandes (se lee como O): usa Poppins.
+5. Opción solo si la pides: tu figura reducida sobre la imagen del tema (mapa) con degradado, como en el video Google Maps y el tráfico.
 
 ### Split screen (solo en algunas tomas)
 

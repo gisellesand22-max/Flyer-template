@@ -6,8 +6,9 @@ Video original: 31.8 s. Con silencios cortados: 27.5 s. Mismo estilo que Tech 0 
 
 1. Serie: "ANOTHER DAY ANOTHER UPDATE", sincronizada con tu voz. ANOTHER en Poppins y DAY y UPDATE en pixel.
 2. Video: "CURP" muy grande en Poppins, "biométrica," en pixel y "la tecnología detrás" en Poppins.
-3. Tú al 66% sobre un degradado de aqua profundo con anillos tipo huella. Portada: cuadro del segundo 3.2 (`output/portada.png`).
-4. Del 4.2 al 4.95 creces al tamaño completo y el fondo se desvanece.
+3. El fondo del video se queda natural (sin teñido ni fondo azul). La serie va arriba a la derecha en aqua profundo y el título grande sobre tu playera en aqua. Portada: cuadro del segundo 2.5 (`output/portada.png`).
+
+Palabras gigantes: en aqua medio, detrás de tu cabeza. Palabras chicas: en aqua profundo a los lados.
 
 ## Animaciones encima de ti (en aqua, sobre tu playera)
 

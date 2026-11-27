@@ -214,89 +214,80 @@ const Lock: React.FC = () => (
   </svg>
 );
 
-// ───────── Apertura (0 a 4.9 s): los dos títulos, grandes. De aquí sale la portada ─────────
-const HER = 0.66; // tamaño de tu figura en la apertura
-const T_TITLES = 4.4; // los títulos se quedan hasta aquí
-const Apertura: React.FC = () => {
-  const t = useT();
-  const her = interpolate(t, [4.2, 4.7], [HER, 1], { ...clampX, easing: ease });
-  const bgOp = interpolate(t, [4.7, 4.95], [1, 0], clampX);
+// ───────── Títulos del inicio (0 a 4.4 s): se quedan para tomar la portada ─────────
+// El video se queda con su fondo natural. La serie va arriba a la derecha (pared, aqua profundo)
+// y el título del video va grande sobre tu playera negra (aqua).
+const T_TITLES = 4.4;
+const SerieTitulo: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const t = frame / fps;
+  const row = (at1: number, at2: number, w2: string, y: number) => {
+    const p1 = popAt(frame, fps, at1), p2 = popAt(frame, fps, at2);
+    return (
+      <div style={{ position: "absolute", right: 40, top: y, display: "flex", alignItems: "baseline", gap: 22 }}>
+        <span style={{ fontFamily: POPPINS, fontWeight: 800, fontSize: 74, letterSpacing: -2, color: C.deep, opacity: t >= at1 ? Math.min(1, p1 * 2) : 0, transform: `scale(${interpolate(p1, [0, 1], [0.55, 1])})`, transformOrigin: "100% 60%" }}>ANOTHER</span>
+        <span style={{ fontFamily: PIXEL, fontWeight: 700, fontSize: 110, letterSpacing: 3, color: C.deep, opacity: t >= at2 ? Math.min(1, p2 * 2) : 0, transform: `scale(${interpolate(p2, [0, 1], [0.55, 1])})`, transformOrigin: "100% 60%" }}>{w2}</span>
+      </div>
+    );
+  };
   return (
-    <AbsoluteFill>
-      {/* Fondo: degradado de aqua profundo con anillos tipo huella */}
-      <AbsoluteFill style={{ opacity: bgOp, background: "linear-gradient(180deg, #0B5E66 0%, #0A5159 60%, #08444B 100%)" }}>
-        <svg width="1080" height="1920" viewBox="0 0 1080 1920" style={{ position: "absolute", inset: 0 }}>
-          {Array.from({ length: 14 }).map((_, i) => (
-            <circle key={i} cx="760" cy="1000" r={110 + i * 78} fill="none" stroke={C.aqua} strokeOpacity="0.1" strokeWidth="14" strokeDasharray={`${180 + i * 30} ${60 + i * 12}`} transform={`rotate(${i * 37} 760 1000)`} />
-          ))}
-        </svg>
-        <AbsoluteFill style={{ background: "radial-gradient(ellipse 60% 38% at 50% 64%, rgba(127,227,232,0.34) 0%, rgba(127,227,232,0) 100%)" }} />
-      </AbsoluteFill>
-      {/* Títulos, detrás de ti */}
-      <Scene a={0} b={T_TITLES}>
-        {/* Serie: ANOTHER DAY / ANOTHER UPDATE */}
-        <Tx text="ANOTHER" at={0.0} to={T_TITLES} y={118} x={60} align="left" size={88} weight={800} grow={false} />
-        <Tx text="DAY" at={0.24} to={T_TITLES} y={96} x={560} align="left" size={132} pixel grow={false} />
-        <Tx text="ANOTHER" at={0.82} to={T_TITLES} y={248} x={60} align="left" size={88} weight={800} grow={false} />
-        <Tx text="UPDATE" at={0.94} to={T_TITLES} y={226} x={540} align="left" size={132} pixel grow={false} />
-        {/* Título del video */}
-        <Tx text="CURP" at={0.3} to={T_TITLES} y={390} x={60} align="left" size={290} grow={false} />
-        <Tx text="biométrica," at={0.5} to={T_TITLES} y={655} x={60} align="left" size={138} pixel grow={false} />
-        <Tx text="la tecnología detrás" at={0.7} to={T_TITLES} y={800} x={60} align="left" size={90} weight={700} grow={false} />
-      </Scene>
-      {/* Tú, un poco más chica; al final creces hasta el tamaño completo. Los costados se difuminan */}
-      <AbsoluteFill
-        style={{
-          transform: `scale(${her})`, transformOrigin: "50% 100%",
-          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, #000 16%, #000 84%, transparent 100%)",
-          maskImage: "linear-gradient(90deg, transparent 0%, #000 16%, #000 84%, transparent 100%)",
-        }}
-      >
-        <Person />
-      </AbsoluteFill>
-    </AbsoluteFill>
+    <>
+      {row(0.0, 0.24, "DAY", 80)}
+      {row(0.82, 0.94, "UPDATE", 200)}
+    </>
   );
 };
+const Titulos: React.FC = () => (
+  <Scene a={0} b={T_TITLES}>
+    <SerieTitulo />
+    <Tx text="CURP" at={0.3} to={T_TITLES} y={925} x={60} align="left" size={290} grow={false} />
+    <Tx text="biométrica," at={0.5} to={T_TITLES} y={1190} x={60} align="left" size={138} pixel grow={false} />
+    <Tx text="la tecnología detrás" at={0.7} to={T_TITLES} y={1355} x={60} align="left" size={90} weight={700} grow={false} />
+  </Scene>
+);
 
 // ───────── Palabras alrededor de ti ─────────
-// DETRÁS de ti (aqua, gigantes, arriba de tu cabeza)
+// DETRÁS de ti (aqua, gigantes, justo arriba de tu cabeza; tu cabeza tapa un poco la parte baja)
+const BY = 285;
 const BEHIND: TxP[] = [
-  { text: "iris", at: 5.4, to: 6.45, y: 105, size: 260 },
-  { text: "cara", at: 7.06, to: 7.52, y: 105, size: 260 },
-  { text: "DIGITAL", at: 7.88, to: 8.45, y: 105, size: 200, pixel: true },
-  { text: "CÓDIGO", at: 12.42, to: 12.7, y: 105, size: 210, pixel: true },
-  { text: "guardado", at: 14.62, to: 15.2, y: 105, size: 190 },
-  { text: "foto", at: 17.16, to: 17.95, y: 105, size: 270 },
-  { text: "POR TI", at: 18.82, to: 19.3, y: 105, size: 210, pixel: true },
-  { text: "QR", at: 20.38, to: 21.0, y: 100, size: 320, pixel: true },
-  { text: "llave", at: 21.86, to: 22.45, y: 105, size: 260 },
-  { text: "falsificar", at: 23.2, to: 24.05, y: 120, size: 170 },
-  { text: "GRATIS", at: 25.58, to: 26.5, y: 105, size: 250, pixel: true },
+  { text: "huellas", at: 4.58, to: 5.3, y: BY, size: 200 },
+  { text: "iris", at: 5.4, to: 6.45, y: BY, size: 260 },
+  { text: "foto", at: 6.58, to: 7.06, y: BY, size: 230 },
+  { text: "cara", at: 7.06, to: 7.52, y: BY, size: 260 },
+  { text: "firma", at: 7.62, to: 7.88, y: BY, size: 200 },
+  { text: "DIGITAL", at: 7.88, to: 8.45, y: BY, size: 200, pixel: true },
+  { text: "convierten", at: 10.94, to: 11.8, y: BY, size: 160 },
+  { text: "CÓDIGO", at: 12.42, to: 12.7, y: BY, size: 210, pixel: true },
+  { text: "numérico", at: 12.68, to: 13.3, y: BY, size: 175 },
+  { text: "comparan", at: 13.6, to: 14.55, y: BY, size: 175 },
+  { text: "guardado", at: 14.62, to: 15.2, y: BY, size: 190 },
+  { text: "identificas", at: 15.52, to: 16.5, y: BY, size: 140 },
+  { text: "foto", at: 17.16, to: 17.95, y: BY, size: 270 },
+  { text: "nadie", at: 18.08, to: 18.54, y: BY, size: 230 },
+  { text: "POR TI", at: 18.82, to: 19.3, y: BY, size: 210, pixel: true },
+  { text: "código", at: 20.12, to: 20.38, y: BY, size: 170 },
+  { text: "QR", at: 20.38, to: 21.0, y: BY - 15, size: 320, pixel: true },
+  { text: "valida", at: 21.34, to: 21.86, y: BY, size: 230 },
+  { text: "llave", at: 21.86, to: 22.45, y: BY, size: 260 },
+  { text: "difícil", at: 22.92, to: 23.2, y: BY, size: 210 },
+  { text: "falsificar", at: 23.2, to: 24.05, y: BY, size: 175 },
+  { text: "GRATIS", at: 25.58, to: 26.5, y: BY, size: 250, pixel: true },
+  { text: "voluntaria", at: 26.76, to: 27.5, y: BY, size: 165 },
 ];
-// DELANTE: arriba y a los lados
+// DELANTE: palabras chicas a los lados y arriba (aqua profundo sobre la pared)
+const SIDE = { color: C.deep, weight: 700 } as const;
 const FRONT: TxP[] = [
-  { text: "10", at: 4.46, to: 5.3, y: 90, x: 50, align: "left", size: 220, pixel: true },
-  { text: "huellas", at: 4.58, to: 5.3, y: 105, x: 1040, align: "right", size: 170 },
-  { text: "ojos", at: 5.82, to: 6.45, y: 400, x: 1040, align: "right", size: 90, weight: 700 },
-  { text: "foto", at: 6.58, to: 7.06, y: 100, size: 190 },
-  { text: "firma", at: 7.62, to: 8.1, y: 100, size: 160 },
-  { text: "estos sistemas", at: 8.82, to: 10.4, y: 100, size: 100, weight: 700 },
-  { text: "en general", at: 8.5, to: 8.82, y: 400, x: 40, align: "left", size: 70, weight: 700 },
-  { text: "convierten", at: 10.94, to: 11.8, y: 100, size: 140 },
-  { text: "cada rasgo", at: 11.46, to: 12.42, y: 400, x: 40, align: "left", size: 66, weight: 700 },
-  { text: "numérico", at: 12.68, to: 13.3, y: 100, size: 160 },
-  { text: "comparan", at: 13.6, to: 14.55, y: 100, size: 160 },
-  { text: "identificas", at: 15.52, to: 16.5, y: 100, size: 130 },
-  { text: "te toman", at: 16.68, to: 17.16, y: 400, x: 40, align: "left", size: 70, weight: 700 },
-  { text: "nadie", at: 18.08, to: 18.54, y: 100, size: 200 },
-  { text: "se haga", at: 18.22, to: 18.82, y: 400, x: 40, align: "left", size: 70, weight: 700 },
-  { text: "además", at: 19.52, to: 20.12, y: 400, x: 40, align: "left", size: 70, weight: 700 },
-  { text: "código", at: 20.12, to: 20.38, y: 100, size: 160 },
-  { text: "valida", at: 21.34, to: 21.86, y: 100, size: 200 },
-  { text: "muy", at: 22.76, to: 22.92, y: 400, x: 40, align: "left", size: 80, weight: 700 },
-  { text: "difícil", at: 22.92, to: 23.2, y: 100, size: 190 },
-  { text: "sigue siendo", at: 24.86, to: 25.58, y: 400, x: 40, align: "left", size: 66, weight: 700 },
-  { text: "voluntaria", at: 26.76, to: 27.5, y: 105, size: 160 },
+  { text: "10", at: 4.46, to: 5.3, y: 400, x: 40, align: "left", size: 150, pixel: true, color: C.deep },
+  { text: "ojos", at: 5.82, to: 6.45, y: 400, x: 1040, align: "right", size: 90, ...SIDE },
+  { text: "estos sistemas", at: 8.82, to: 10.4, y: 285, size: 100, ...SIDE },
+  { text: "en general", at: 8.5, to: 8.82, y: 400, x: 40, align: "left", size: 70, ...SIDE },
+  { text: "cada rasgo", at: 11.46, to: 12.42, y: 400, x: 40, align: "left", size: 66, ...SIDE },
+  { text: "te toman", at: 16.68, to: 17.16, y: 400, x: 40, align: "left", size: 70, ...SIDE },
+  { text: "se haga", at: 18.22, to: 18.82, y: 400, x: 40, align: "left", size: 70, ...SIDE },
+  { text: "además", at: 19.52, to: 20.12, y: 400, x: 40, align: "left", size: 70, ...SIDE },
+  { text: "muy", at: 22.76, to: 22.92, y: 400, x: 40, align: "left", size: 80, ...SIDE },
+  { text: "sigue siendo", at: 24.86, to: 25.58, y: 400, x: 40, align: "left", size: 66, ...SIDE },
 ];
 
 // ───────── Composición ─────────
@@ -305,16 +296,15 @@ export const Video: React.FC = () => {
   const z = zoomAt(t);
   const flash = interpolate(t, [17.14, 17.2, 17.5], [0, 0.85, 0], clampX);
   return (
-    <AbsoluteFill style={{ background: C.deep }}>
-      {/* Capa principal: tú a pantalla completa, con el fondo teñido de aqua profundo */}
+    <AbsoluteFill style={{ background: C.white }}>
+      {/* Tú a pantalla completa, con tu fondo natural. Las palabras gigantes van detrás de tu cabeza */}
       <AbsoluteFill style={{ transform: `scale(${z})`, transformOrigin: "540px 600px" }}>
         <Base />
-        <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(11,94,102,0.66) 0%, rgba(11,94,102,0.52) 100%)" }} />
-        {BEHIND.map((w, i) => <Tx key={i} {...w} />)}
+        {BEHIND.map((w, i) => <Tx key={i} color={C.mid} {...w} />)}
         <Person />
       </AbsoluteFill>
 
-      {/* Palabras */}
+      {/* Palabras chicas a los lados */}
       {t > 4.4 && FRONT.map((w, i) => <Tx key={i} {...w} />)}
 
       {/* Animaciones encima de ti */}
@@ -330,8 +320,8 @@ export const Video: React.FC = () => {
       <Ov at={22.92} to={24.05}><Lock /></Ov>
       <AbsoluteFill style={{ background: C.white, opacity: flash }} />
 
-      {/* Apertura: títulos grandes y tu figura sobre el degradado */}
-      {t < 5.0 && <Apertura />}
+      {/* Títulos del inicio */}
+      <Titulos />
     </AbsoluteFill>
   );
 };
