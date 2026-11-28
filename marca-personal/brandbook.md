@@ -217,12 +217,17 @@ La serie se llama **ANOTHER DAY ANOTHER UPDATE** y se escribe siempre igual en t
 6. Ubicación segura: arriba en la zona de pared, debajo de la lámpara o de objetos oscuros. Evita pasar texto oscuro sobre tu cabello.
 7. Cuando entra un split screen, quita las palabras grandes de esos segundos para no tapar la captura.
 
+### Movimiento (reglas)
+
+1. **Sin rebote:** el texto entra con aparición suave de 0.25 s subiendo 24 px con frenado, y sale con desvanecido de 0.2 s. No crece ni se encoge.
+2. **Zoom suave y continuo:** acercamiento lento (de 100% a 108%) y alejamiento suave de 0.6 s. Sin cambios de tamaño en los cortes y sin golpes de zoom en las palabras.
+
 ### Tú a pantalla completa con palabras alrededor (formato principal)
 
 1. La mayor parte del video eres tú a pantalla completa. Las palabras funcionan como subtítulos creativos, no como cajas.
 2. Posiciones que se alternan: **arriba** de tu cabeza, **a los lados** (chicas), **detrás** de ti y **encima** de ti sobre la ropa.
 3. Cambia el tamaño todo el tiempo: palabras gigantes (170 a 230 px) junto a palabras de apoyo chicas (70 a 100 px).
-4. **El fondo del video se deja natural.** No se tiñe ni se cambia por un fondo azul: el teñido aqua profundo y el degradado no gustaron en el video de CURP. Para poner palabras detrás de ti se recorta tu figura con un modelo de segmentación.
+4. **Nunca se tiñe ni se difumina el fondo con color aqua.** Solo se cambia el fondo si es una imagen (por ejemplo un mapa) y solo si lo pides. **El fondo del video se deja natural.** No se tiñe ni se cambia por un fondo azul: el teñido aqua profundo y el degradado no gustaron en el video de CURP. Para poner palabras detrás de ti se recorta tu figura con un modelo de segmentación.
 5. El color del texto depende de lo que tenga detrás: aqua profundo sobre pared o fondo claro, aqua sobre tu ropa oscura, y aqua medio para las palabras gigantes detrás de tu cabeza (el aqua claro se pierde sobre fondos blancos).
 6. Las ilustraciones (reloj, señales, celular) van pequeñas al lado de ti, sin tapar tu cara.
 7. Una palabra aparece solo cuando la dices y sale con un zoom corto.

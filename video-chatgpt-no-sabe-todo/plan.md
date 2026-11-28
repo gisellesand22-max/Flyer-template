@@ -58,3 +58,9 @@ El fondo es muy variado (árboles, cielo, vidrio). Por eso propongo:
 1. Recortar tu figura para las palabras detrás de tu cabeza.
 2. Armar y renderizar.
 3. Guardar la regla de "Tech 0 Drama" en `CLAUDE.md` y el brandbook, como hice con "Another Day Another Update".
+
+## Estado (28 de noviembre)
+
+1. Video renderizado: `output/chatgpt_no_sabe_todo.mp4`. Portada: `output/portada.png` (cuadro del segundo 3.3).
+2. Colores: aqua con sombra suave arriba (como pediste), aqua profundo abajo sobre tu ropa y pantalón.
+3. Retoque de piel y dientes aplicado con `scripts/retoque.py`.
