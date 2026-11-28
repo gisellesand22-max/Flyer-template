@@ -6,7 +6,7 @@ import numpy as np, cv2
 from PIL import Image
 src, matte_dir, model, out = sys.argv[1:5]
 W, H = 1080, 1920
-SUAVE = 0.6    # intensidad del suavizado de piel (0 a 1)
+SUAVE = 0.3    # intensidad del suavizado de piel (0 a 1). 0.6 se veía demasiado suave
 DIENTES = 1.0  # intensidad del blanqueado de dientes (0 a 1)
 
 det = cv2.FaceDetectorYN.create(model, "", (W, H), 0.6, 0.3, 5000)
@@ -35,7 +35,7 @@ while True:
         y0, y1 = max(0, int(y - h * 0.4)), min(H, int(y + h * 1.9))
         x0, x1 = max(0, int(x - w * 0.8)), min(W, int(x + w * 1.8))
         crop = f[y0:y1, x0:x1]
-        sm = cv2.bilateralFilter(cv2.bilateralFilter(crop, 9, 38, 9), 9, 30, 7)
+        sm = cv2.bilateralFilter(crop, 9, 30, 7)
         mm = (m[y0:y1, x0:x1] * SUAVE)[..., None]
         f[y0:y1, x0:x1] = (crop * (1 - mm) + sm * mm).astype(np.uint8)
         # ── Dientes: entre las comisuras de la boca, solo pixeles claros y poco rosados ──
